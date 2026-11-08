@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 72" fill="none">
+  <g transform="translate(4 4)">
+    <g transform="rotate(-12 32 32)" fill="none" stroke="#229ED9" stroke-width="6.5" stroke-linecap="round">
+      <path d="M44.05 49.20A21 21 0 1 1 51.03 23.13"/>
+    </g>
+    <g transform="rotate(-12 32 32)" fill="#229ED9">
+      <circle cx="57.60" cy="38.86" r="4.2"/>
+    </g>
+  </g>
+  <text x="88" y="52" fill="#0B1F2A"
+        font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+        font-size="32" font-weight="650" letter-spacing="1.5">MYRQVIA</text>
+</svg>
