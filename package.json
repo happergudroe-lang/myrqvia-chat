@@ -1,0 +1,12 @@
+{
+  "name": "myrqvia-chat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MYRQVIA Chat — official site, web app and auth server",
+  "scripts": {
+    "start": "node server/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
