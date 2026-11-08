@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F5F5F7">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="MYRQVIA Chat 2.0 视觉规范：品牌、色彩、字体、布局、组件、动效与原则。">
+  <title>MYRQVIA Chat 2.0 · 视觉规范</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('myrqvia.spec.theme');
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* no-op */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/typography.css">
+</head>
+<body class="spec-doc">
+
+<!-- ======================================================================
+     Icon sprite — only the functional glyphs used by component samples
+     ====================================================================== -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1.6c.48 5.2 3.6 8.32 8.8 8.8-5.2.48-8.32 3.6-8.8 8.8-.48-5.2-3.6-8.32-8.8-8.8 5.2-.48 8.32-3.6 8.8-8.8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.7 5.3 8 12l6.7 6.7"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 10.9v5.4"/><circle cx="12" cy="7.9" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19.2V5.2M6.4 10.8 12 5.2l5.6 5.6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.2v13.6M5.2 12h13.6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9.3 4.2h5.4l-.9 5.6 3.6 3.9H6.6l3.6-3.9-.9-5.6Z"/><path d="M12 13.7v6"/></symbol>
+  <symbol id="i-muted" viewBox="0 0 24 24"><path d="M18 8.6a6 6 0 0 0-9.4-4.9M6 8.6c0 6.4-2.4 6.5-2.4 8.1h12.2"/><path d="M10.2 20.4h3.6M3.8 3.8l16.4 16.4"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M13.6 3.8H7.4A2.4 2.4 0 0 0 5 6.2v11.6a2.4 2.4 0 0 0 2.4 2.4h9.2a2.4 2.4 0 0 0 2.4-2.4V9.2l-5.4-5.4Z"/><path d="M13.4 3.9v5.3H19"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.5 4.5 4.5L19.4 6.8"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.7v4.7l3 1.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.6v5.1"/><circle cx="12" cy="16.3" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 24 24"><path d="M9.2 6.4 3.6 12l5.6 5.6"/><path d="M3.6 12h9.7a7 7 0 0 1 7 7v.6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.2" y="8.2" width="11.6" height="11.6" rx="2.4"/><path d="M15.8 8.2V6.4a2.4 2.4 0 0 0-2.4-2.4H6.4A2.4 2.4 0 0 0 4 6.4v7a2.4 2.4 0 0 0 2.4 2.4h1.8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 9.7l5.4-.8L12 4Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.8 6.8h14.4M9.4 6.8V4.9c0-.6.5-1.1 1.1-1.1h3c.6 0 1.1.5 1.1 1.1v1.9M6.7 6.8l.8 11.7c0 .9.8 1.6 1.7 1.6h5.6c.9 0 1.7-.7 1.7-1.6l.8-11.7"/><path d="M10.2 10.4v5.8M13.8 10.4v5.8"/></symbol>
+  <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3.8" y="5" width="16.4" height="14" rx="2.6"/><circle cx="9" cy="10" r="1.5"/><path d="m5.2 17.5 4.7-4.4 3.6 3.2 2.5-2.2 2.8 2.6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4.8 12h14.4M13.8 6.6 19.2 12l-5.4 5.4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.2 4.2"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.3 5.3 6.7 6.7-6.7 6.7"/></symbol>
+  <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M4.5 10.2v3.6a1.2 1.2 0 0 0 1.2 1.2h2.1l4.2 3V6l-4.2 3H5.7a1.2 1.2 0 0 0-1.2 1.2Z"/><path d="M15.1 8.6a4.6 4.6 0 0 1 0 6.8M17.9 5.9a8.4 8.4 0 0 1 0 12.2"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M4.6 9.8a7.6 7.6 0 1 1 1.5 6"/><path d="M4.6 4.8v5h5"/></symbol>
+</svg>
+
+<div class="spec-shell">
+
+  <!-- ====================================================================
+       Sticky left navigation (desktop)
+       ==================================================================== -->
+  <aside class="spec-nav" aria-label="规范章节">
+    <a class="nav-brand" href="#cover" aria-label="MYRQVIA Chat 2.0 视觉规范">
+      <svg class="nav-spark" aria-hidden="true"><use href="#i-spark"/></svg>
+      <span class="nav-word">MYRQVIA</span>
+      <span class="nav-version">2.0</span>
+    </a>
+    <p class="nav-kicker">视觉规范<span>Visual Specification</span></p>
+
+    <nav class="nav-list" aria-label="目录">
+      <a class="nav-item" href="#cover"><span class="nav-num">00</span><span>封面</span></a>
+      <a class="nav-item" href="#brand"><span class="nav-num">01</span><span>品牌</span></a>
+      <a class="nav-item" href="#color"><span class="nav-num">02</span><span>色彩</span></a>
+      <a class="nav-item" href="#type"><span class="nav-num">03</span><span>字体</span></a>
+      <a class="nav-item" href="#layout"><span class="nav-num">04</span><span>布局</span></a>
+      <a class="nav-item" href="#components"><span class="nav-num">05</span><span>组件</span></a>
+      <a class="nav-item" href="#motion"><span class="nav-num">06</span><span>动效</span></a>
+      <a class="nav-item" href="#principles"><span class="nav-num">07</span><span>原则</span></a>
+    </nav>
+
+    <div class="nav-foot">
+      <p>Light &amp; Dark<br>Desktop · Tablet · iPhone</p>
+      <a href="index.html">查看产品原型 <span aria-hidden="true">↗</span></a>
+      <span class="nav-copyright">MYRQVIA Design · 2026</span>
+    </div>
+  </aside>
+
+  <div class="spec-content">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-kicker">MYRQVIA Design System</span>
+        <span class="topbar-current" id="topbar-current">00 / 封面</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="reduce-toggle" id="reduce-toggle" type="button" aria-pressed="false" aria-label="减少动态效果">
+          <span class="reduce-indicator" aria-hidden="true"></span>
+          <span class="reduce-label reduce-label-long">减少动态</span>
+          <span class="reduce-label reduce-label-short">动效</span>
+        </button>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="切换至深色模式">
+          <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
+          <span class="theme-label" id="theme-label">浅色</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="mobile-nav" aria-label="章节导航（移动端）">
+      <label class="mobile-nav-label" for="mobile-select">章节</label>
+      <div class="mobile-select-wrap">
+        <select id="mobile-select">
+          <option value="cover">00 / 封面</option>
+          <option value="brand">01 / 品牌</option>
+          <option value="color">02 / 色彩</option>
+          <option value="type">03 / 字体</option>
+          <option value="layout">04 / 布局</option>
+          <option value="components">05 / 组件</option>
+          <option value="motion">06 / 动效</option>
+          <option value="principles">07 / 原则</option>
+        </select>
+        <svg class="mobile-select-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+      </div>
+      <a class="mobile-top-link" href="#cover">顶部</a>
+    </nav>
+
+    <main id="main">
+
+      <!-- ================================================================
+           00 — COVER
+           ================================================================ -->
+      <section class="section section-cover" id="cover" data-section="00 / 封面">
+        <div class="cover-grid">
+          <div class="cover-copy">
+            <p class="eyebrow">MYRQVIA DESIGN SYSTEM · 2026</p>
+            <div class="cover-lockup">
+              <svg class="cover-spark" aria-hidden="true"><use href="#i-spark"/></svg>
+              <span class="cover-word">MYRQVIA</span>
+            </div>
+            <h1>视觉规范<span class="sr-only"> · MYRQVIA Chat 2.0</span></h1>
+            <p class="cover-subtitle">Chat 2.0 · Visual Specification</p>
+            <p class="cover-lede">
+              一套为长时间对话而设计的视觉语言。安静的层级、稳定的留白、一枚蓝色，
+              以及一段有秩序的退场。它不靠装饰证明自己，只让内容更容易被读完。
+            </p>
+            <dl class="cover-meta">
+              <div><dt>版本</dt><dd>2.0</dd></div>
+              <div><dt>发布</dt><dd>2026.11</dd></div>
+              <div><dt>主题</dt><dd>Light &amp; Dark</dd></div>
+              <div><dt>平台</dt><dd>Desktop · Tablet · iPhone</dd></div>
+            </dl>
+          </div>
+
+          <figure class="cover-figure">
+            <div class="shot-frame">
+              <img class="shot-light" src="screens/desktop-chat-light.png" alt="MYRQVIA Chat 2.0 桌面端浅色对话界面" width="1440" height="900">
+              <img class="shot-dark" src="screens/desktop-chat-dark.png" alt="MYRQVIA Chat 2.0 桌面端深色对话界面" width="1440" height="900">
+            </div>
+            <figcaption>
+              <span>产品渲染 · 桌面端</span>
+              <span>1440 × 900 · Light / Dark</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="cover-toc">
+          <div class="toc-head">
+            <span class="eyebrow">CONTENTS</span>
+            <span class="toc-count">07 个章节</span>
+          </div>
+          <ol class="toc-list">
+            <li><a href="#brand"><span class="toc-num">01</span><strong>品牌</strong><em>Spark 标记、字标与净空</em></a></li>
+            <li><a href="#color"><span class="toc-num">02</span><strong>色彩</strong><em>两套主题、唯一的蓝</em></a></li>
+            <li><a href="#type"><span class="toc-num">03</span><strong>字体</strong><em>字号、字重与阅读节奏</em></a></li>
+            <li><a href="#layout"><span class="toc-num">04</span><strong>布局</strong><em>侧栏、会话列与安全区</em></a></li>
+            <li><a href="#components"><span class="toc-num">05</span><strong>组件</strong><em>状态、反馈与操作</em></a></li>
+            <li><a href="#motion"><span class="toc-num">06</span><strong>动效</strong><em>时间、曲线与撤回</em></a></li>
+            <li><a href="#principles"><span class="toc-num">07</span><strong>原则</strong><em>八条约束与禁止项</em></a></li>
+            <li class="toc-note">
+              <span class="toc-num">NOTE</span>
+              <p>所有组件样本直接引用 Token；尺寸以 CSS 逻辑像素标注。</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           01 — BRAND
+           ================================================================ -->
+      <section class="section" id="brand" data-section="01 / 品牌">
+        <header class="section-head">
+          <span class="sec-num">01</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">BRAND &amp; IDENTITY</p>
+            <h2>品牌</h2>
+            <p class="section-lede">
+              MYRQVIA 的标记是一枚四角火花，来自“新星”的最简形状：没有描边、没有光晕，
+              只保留四个向内收拢的尖角。它必须永远以单色出现，并与字标保持固定的呼吸。
+            </p>
+          </div>
+        </header>
+
+        <div class="spec-card brand-specimen-card">
+          <div class="card-head">
+            <h3>品牌标本</h3>
+            <span class="card-meta">MARK / WORDMARK</span>
+          </div>
+          <div class="brand-specimen-body">
+            <div class="brand-mark-stage">
+              <svg class="brand-mark-xl" aria-hidden="true"><use href="#i-spark"/></svg>
+              <span class="brand-mark-caption">四角火花 · 单色</span>
+            </div>
+            <div class="brand-lockup-stage">
+              <span class="brand-lockup-word">MYRQVIA</span>
+              <span class="brand-lockup-tail">CHAT 2.0</span>
+            </div>
+            <div class="brand-specimen-notes">
+              <p><span>字标</span>字距 .22em，全大写，不替换为其他字体。</p>
+              <p><span>比例</span>火花高度 = 字标大写高度，间距 8px。</p>
+              <p><span>态度</span>不旋转、不描边、不加阴影或发光。</p>
+            </div>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">用法</span>
+            应用内头部为 16px 火花 + 12.5px 字标 + 9px 版本号；此标本仅用于放大检查，不按此尺寸上线。
+          </p>
+        </div>
+
+        <div class="brand-grid">
+          <div class="spec-card">
+            <div class="card-head"><h3>净空区</h3><span class="card-meta">CLEAR SPACE</span></div>
+            <div class="clearspace-stage">
+              <div class="clearspace-box">
+                <span class="clearspace-tag clearspace-tag-x">0.5X</span>
+                <span class="clearspace-tag clearspace-tag-y">0.5X</span>
+                <svg class="clearspace-mark" aria-hidden="true"><use href="#i-spark"/></svg>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规则</span>
+              四周净空 = 火花高度 X 的 0.5 倍，且不小于 8px。净空区内不得出现文字、图标、描边或图片边缘。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>最小尺寸与已批准用法</h3><span class="card-meta">USAGE</span></div>
+            <dl class="size-list">
+              <div><dt>火花标记</dt><dd>≥ 12px 屏幕 / 8mm 印刷</dd></div>
+              <div><dt>MYRQVIA 字标</dt><dd>≥ 13px 高，字距 .22em</dd></div>
+              <div><dt>完整锁定</dt><dd>≥ 24px 高，保留 0.5X 净空</dd></div>
+            </dl>
+            <div class="brand-tone-row">
+              <div class="brand-tone brand-tone-light">
+                <svg aria-hidden="true"><use href="#i-spark"/></svg><span>MYRQVIA</span>
+                <em>首选 · 浅色底</em>
+              </div>
+              <div class="brand-tone brand-tone-dark">
+                <svg aria-hidden="true"><use href="#i-spark"/></svg><span>MYRQVIA</span>
+                <em>反白 · 深色底</em>
+              </div>
+              <div class="brand-tone brand-tone-mono">
+                <svg aria-hidden="true"><use href="#i-spark"/></svg><span>MYRQVIA</span>
+                <em>单色 · 限制场景</em>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">色彩</span>
+              默认使用强调蓝；单色黑 / 反白仅用于印刷、压印或无法使用蓝色的场景。
+            </p>
+          </div>
+        </div>
+
+        <div class="spec-card">
+          <div class="card-head"><h3>不要这样使用</h3><span class="card-meta">DON'TS</span></div>
+          <ul class="dont-list">
+            <li><span class="dont-mark">×</span><div><strong>不拉伸、不压扁</strong><p>标记必须保持 1:1；字标必须保留原有比例。</p></div></li>
+            <li><span class="dont-mark">×</span><div><strong>不改变尖角比例</strong><p>不替换路径、不添加描边、不切圆角。</p></div></li>
+            <li><span class="dont-mark">×</span><div><strong>不加效果</strong><p>禁止阴影、发光、渐变填充与彩色投影。</p></div></li>
+            <li><span class="dont-mark">×</span><div><strong>不放彩色圆角底</strong><p>标记永远直接落在实色背景上，不做 App 图标式包装。</p></div></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           02 — COLOR
+           ================================================================ -->
+      <section class="section" id="color" data-section="02 / 色彩">
+        <header class="section-head">
+          <span class="sec-num">02</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">COLOR</p>
+            <h2>色彩</h2>
+            <p class="section-lede">
+              浅色以纸张般的白与冷灰建立层级，深色以纯黑与抬升的碳灰保持深度。
+              整个系统只有一枚强调蓝；绿色、红色与橙色只承担状态语义，不参与装饰。
+            </p>
+          </div>
+        </header>
+
+        <div class="color-hero">
+          <div class="color-accent-panel">
+            <div class="accent-panel-copy">
+              <span class="eyebrow eyebrow-on-accent">ACCENT / 唯一强调</span>
+              <strong class="accent-hex">#0A7CFF</strong>
+              <span class="accent-hex-dark">深色主题 #0A84FF</span>
+              <p>发送、选中、未读与链接。除状态语义外，不引入第二强调色。</p>
+            </div>
+            <div class="accent-panel-foot">
+              <span>白字 / 蓝底 <b>3.93:1</b></span>
+              <span>按下态 <b>#0067D8</b></span>
+              <span>浅色 / 深色 <b>同步语义</b></span>
+            </div>
+          </div>
+          <div class="color-semantic-panel" aria-label="状态色">
+            <div class="semantic-tile semantic-green">
+              <span class="semantic-name">GREEN / 成功</span>
+              <strong>#34C759</strong>
+              <p>在线、开关开启、操作成功</p>
+            </div>
+            <div class="semantic-tile semantic-red">
+              <span class="semantic-name">RED / 危险</span>
+              <strong>#FF3B30</strong>
+              <p>删除、撤回失败、未发送</p>
+            </div>
+            <div class="semantic-tile semantic-orange">
+              <span class="semantic-name">ORANGE / 提醒</span>
+              <strong>#F5A524</strong>
+              <p>离线、非阻断警告、网络条</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head">
+            <h3>色彩 Token</h3>
+            <span class="card-meta">LIGHT / DARK · 17 TOKENS</span>
+          </div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="浅色与深色色彩 Token 表">
+            <table class="swatch-table">
+              <thead>
+                <tr>
+                  <th scope="col">色值</th>
+                  <th scope="col">Token</th>
+                  <th scope="col">HEX</th>
+                  <th scope="col">RGBA</th>
+                  <th scope="col">角色</th>
+                  <th scope="col">使用位置</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="theme-band"><td colspan="6"><span>LIGHT</span><em>浅色 · 默认</em></td></tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#FFFFFF;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bg-app</code></td><td class="hex">#FFFFFF</td><td class="rgba">rgba(255,255,255,1)</td><td>应用底色</td><td>桌面聊天区、浮层内容</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#F5F5F7;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bg-sidebar</code></td><td class="hex">#F5F5F7</td><td class="rgba">rgba(245,245,247,1)</td><td>侧栏 / 页面</td><td>会话列表、设置页、本规范页</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#FFFFFF;--sw-base:#F5F5F7"></span></td>
+                  <td><code>--bg-elevated</code></td><td class="hex">#FFFFFF</td><td class="rgba">rgba(255,255,255,1)</td><td>抬升表面</td><td>卡片、菜单、弹窗</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#EDEDF0;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bg-fill</code></td><td class="hex">#EDEDF0</td><td class="rgba">rgba(237,237,240,1)</td><td>控件填充</td><td>搜索框、输入区、关闭按钮</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#E2E2E7;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bg-fill-strong</code></td><td class="hex">#E2E2E7</td><td class="rgba">rgba(226,226,231,1)</td><td>强填充</td><td>滑杆轨道、按下态</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(17,17,19,.075);--sw-base:#FFFFFF"></span></td>
+                  <td><code>--separator</code></td><td class="hex">#111113 · 7.5%</td><td class="rgba">rgba(17,17,19,0.075)</td><td>常规分割</td><td>列表、顶栏、卡片边</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(17,17,19,.13);--sw-base:#FFFFFF"></span></td>
+                  <td><code>--separator-strong</code></td><td class="hex">#111113 · 13%</td><td class="rgba">rgba(17,17,19,0.13)</td><td>强分割</td><td>聚焦边框、头像描边</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#111113;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--text-primary</code></td><td class="hex">#111113</td><td class="rgba">rgba(17,17,19,1)</td><td>主文本</td><td>标题、正文、强调时间</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#6F6F78;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--text-secondary</code></td><td class="hex">#6F6F78</td><td class="rgba">rgba(111,111,120,1)</td><td>次文本</td><td>摘要、说明、状态</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#A0A0A8;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--text-tertiary</code></td><td class="hex">#A0A0A8</td><td class="rgba">rgba(160,160,168,1)</td><td>三级文本</td><td>时间、占位、元信息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#0A7CFF;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--accent</code></td><td class="hex">#0A7CFF</td><td class="rgba">rgba(10,124,255,1)</td><td>唯一强调</td><td>发送、选中、未读、链接</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(10,124,255,.1);--sw-base:#FFFFFF"></span></td>
+                  <td><code>--accent-soft</code></td><td class="hex">#0A7CFF · 10%</td><td class="rgba">rgba(10,124,255,0.1)</td><td>强调底</td><td>回应底色、标签底</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#EAEAEE;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bubble-in</code></td><td class="hex">#EAEAEE</td><td class="rgba">rgba(234,234,238,1)</td><td>接收气泡</td><td>对方消息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#0A7CFF;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--bubble-out</code></td><td class="hex">#0A7CFF</td><td class="rgba">rgba(10,124,255,1)</td><td>发送气泡</td><td>自己的消息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#34C759;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--green</code></td><td class="hex">#34C759</td><td class="rgba">rgba(52,199,89,1)</td><td>在线 / 开启</td><td>在线点、开关开启</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#FF3B30;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--red</code></td><td class="hex">#FF3B30</td><td class="rgba">rgba(255,59,48,1)</td><td>危险 / 失败</td><td>删除、未发送</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#F5A524;--sw-base:#FFFFFF"></span></td>
+                  <td><code>--orange</code></td><td class="hex">#F5A524</td><td class="rgba">rgba(245,165,36,1)</td><td>离线 / 警示</td><td>网络条、非阻断警告</td>
+                </tr>
+
+                <tr class="theme-band"><td colspan="6"><span>DARK</span><em>深色 · 跟随系统或手动切换</em></td></tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#000000;--sw-base:#000000"></span></td>
+                  <td><code>--bg-app</code></td><td class="hex">#000000</td><td class="rgba">rgba(0,0,0,1)</td><td>应用底色</td><td>聊天区；纯黑只允许出现在深色主题</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#0B0B0D;--sw-base:#000000"></span></td>
+                  <td><code>--bg-sidebar</code></td><td class="hex">#0B0B0D</td><td class="rgba">rgba(11,11,13,1)</td><td>侧栏 / 页面</td><td>会话列表、规范页</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#1C1C1F;--sw-base:#000000"></span></td>
+                  <td><code>--bg-elevated</code></td><td class="hex">#1C1C1F</td><td class="rgba">rgba(28,28,31,1)</td><td>抬升表面</td><td>卡片、菜单、弹窗</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#1A1A1D;--sw-base:#000000"></span></td>
+                  <td><code>--bg-fill</code></td><td class="hex">#1A1A1D</td><td class="rgba">rgba(26,26,29,1)</td><td>控件填充</td><td>搜索框、输入区</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#2C2C30;--sw-base:#000000"></span></td>
+                  <td><code>--bg-fill-strong</code></td><td class="hex">#2C2C30</td><td class="rgba">rgba(44,44,48,1)</td><td>强填充</td><td>滑杆轨道、按下态</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(255,255,255,.085);--sw-base:#0B0B0D"></span></td>
+                  <td><code>--separator</code></td><td class="hex">#FFFFFF · 8.5%</td><td class="rgba">rgba(255,255,255,0.085)</td><td>常规分割</td><td>列表、顶栏、卡片边</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(255,255,255,.14);--sw-base:#0B0B0D"></span></td>
+                  <td><code>--separator-strong</code></td><td class="hex">#FFFFFF · 14%</td><td class="rgba">rgba(255,255,255,0.14)</td><td>强分割</td><td>聚焦边框、头像描边</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#F2F2F5;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--text-primary</code></td><td class="hex">#F2F2F5</td><td class="rgba">rgba(242,242,245,1)</td><td>主文本</td><td>标题、正文、强调时间</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#98989F;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--text-secondary</code></td><td class="hex">#98989F</td><td class="rgba">rgba(152,152,159,1)</td><td>次文本</td><td>摘要、说明、状态</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#65656C;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--text-tertiary</code></td><td class="hex">#65656C</td><td class="rgba">rgba(101,101,108,1)</td><td>三级文本</td><td>时间、占位、元信息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#0A84FF;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--accent</code></td><td class="hex">#0A84FF</td><td class="rgba">rgba(10,132,255,1)</td><td>唯一强调</td><td>发送、选中、未读、链接</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:rgba(10,132,255,.16);--sw-base:#0B0B0D"></span></td>
+                  <td><code>--accent-soft</code></td><td class="hex">#0A84FF · 16%</td><td class="rgba">rgba(10,132,255,0.16)</td><td>强调底</td><td>回应底色、标签底</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#26262B;--sw-base:#000000"></span></td>
+                  <td><code>--bubble-in</code></td><td class="hex">#26262B</td><td class="rgba">rgba(38,38,43,1)</td><td>接收气泡</td><td>对方消息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#0A84FF;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--bubble-out</code></td><td class="hex">#0A84FF</td><td class="rgba">rgba(10,132,255,1)</td><td>发送气泡</td><td>自己的消息</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#30D158;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--green</code></td><td class="hex">#30D158</td><td class="rgba">rgba(48,209,88,1)</td><td>在线 / 开启</td><td>在线点、开关开启</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#FF453A;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--red</code></td><td class="hex">#FF453A</td><td class="rgba">rgba(255,69,58,1)</td><td>危险 / 失败</td><td>删除、未发送</td>
+                </tr>
+                <tr>
+                  <td><span class="swatch" style="--sw:#FFB340;--sw-base:#0B0B0D"></span></td>
+                  <td><code>--orange</code></td><td class="hex">#FFB340</td><td class="rgba">rgba(255,179,64,1)</td><td>离线 / 警示</td><td>网络条、非阻断警告</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">规则</span>
+            所有颜色必须引用 Token，不在组件里写十六进制。透明度只用于分割线与强调底；文字与气泡保持实色。
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="spec-card">
+            <div class="card-head"><h3>对比度记录</h3><span class="card-meta">ACCESSIBILITY</span></div>
+            <div class="contrast-list">
+              <div class="contrast-item">
+                <span class="contrast-chip chip-white-on-blue">Aa</span>
+                <div><strong>白字 / 发送气泡</strong><span>浅色 3.93:1 · 深色 3.65:1</span></div>
+                <em>仅短句</em>
+              </div>
+              <div class="contrast-item">
+                <span class="contrast-chip chip-secondary">Aa</span>
+                <div><strong>次级文本 / 白底</strong><span>4.98:1 · 侧栏底 4.57:1</span></div>
+                <em>AA</em>
+              </div>
+              <div class="contrast-item">
+                <span class="contrast-chip chip-tertiary">Aa</span>
+                <div><strong>三级文本 / 白底</strong><span>2.60:1 · 仅非必要元信息</span></div>
+                <em>受限</em>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">取舍</span>
+              蓝底白字低于 WCAG AA 的 4.5:1。MYRQVIA 保留该组合以贴近系统信息体验，但把蓝底正文限制在
+              16px / 23 的短句；正式发布前应评估改用 <code>--accent-pressed</code>（≈5.34:1）或提供高对比模式。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>禁止</h3><span class="card-meta">OFF-LIMITS</span></div>
+            <ul class="forbidden-list">
+              <li><span class="forbidden-x">×</span><div><strong>紫色 / 蓝紫渐变</strong><p>不建立第二强调色；禁止以 #7C5CFF 一类色相主导界面。</p></div></li>
+              <li><span class="forbidden-x">×</span><div><strong>整页玻璃与透明堆叠</strong><p>液态玻璃只用于导航、菜单和浮层；正文、设置与长列表保持实底，不做整页磨砂。</p></div></li>
+              <li><span class="forbidden-x">×</span><div><strong>发光与彩色投影</strong><p>阴影只用于表达真实层级，不做光晕。</p></div></li>
+              <li><span class="forbidden-x">×</span><div><strong>饱和度堆叠</strong><p>同一屏不允许出现三种以上高饱和色块。</p></div></li>
+              <li><span class="forbidden-x">×</span><div><strong>任意装饰色</strong><p>渐变描边、彩色图标底、彩色标签均不成立。</p></div></li>
+            </ul>
+            <p class="sample-caption">
+              <span class="cap-k">判断</span>
+              如果一个颜色不能回答“它表达什么状态”，它就不应该出现。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           03 — TYPOGRAPHY
+           ================================================================ -->
+      <section class="section" id="type" data-section="03 / 字体">
+        <header class="section-head">
+          <span class="sec-num">03</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">TYPOGRAPHY</p>
+            <h2>字体</h2>
+            <p class="section-lede">
+              字体不表演。它只负责让中文、拉丁字母与数字在同一行里保持相同的呼吸。
+              系统字体栈优先使用平台原生的 SF Pro 与 Segoe UI Variable，中文回落到 Noto Sans SC / PingFang SC。
+            </p>
+          </div>
+        </header>
+
+        <div class="spec-card font-card">
+          <div class="card-head"><h3>字体栈</h3><span class="card-meta">SYSTEM FONTS ONLY</span></div>
+          <div class="font-stack-grid">
+            <div class="font-stack-code">
+              <span class="font-stack-label">--font-ui</span>
+              <code>-apple-system, BlinkMacSystemFont,<br>
+                "SF Pro Text", "SF Pro Display",<br>
+                "Segoe UI Variable Text", "Segoe UI",<br>
+                "Noto Sans SC", "PingFang SC",<br>
+                "Microsoft YaHei UI", sans-serif</code>
+            </div>
+            <ul class="font-stack-notes">
+              <li><strong>Apple</strong><span>SF Pro Text 用于 ≤ 19px，SF Pro Display 用于更大的标题；不引入 Web Font。</span></li>
+              <li><strong>Windows</strong><span>Segoe UI Variable Text 优先，Segoe UI 回落；中文字重 400 / 500 / 600 / 700。</span></li>
+              <li><strong>中文</strong><span>Noto Sans SC → PingFang SC → Microsoft YaHei UI；不合成斜体、不伪造粗体。</span></li>
+              <li><strong>数字</strong><span>时间、版本、大小与计数使用 tabular-nums，避免跳动。</span></li>
+            </ul>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">规则</span>
+            界面只用系统字体。字距是排版参数，不是装饰：大标题收紧，微文案放开；中文正文保持 0 附近。
+          </p>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head">
+            <h3>字阶</h3>
+            <span class="card-meta">NINE STEPS · 34 → 10.5</span>
+          </div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="MYRQVIA 字阶表">
+            <table class="type-table">
+              <thead>
+                <tr>
+                  <th scope="col">Token</th>
+                  <th scope="col">用途</th>
+                  <th scope="col">字号</th>
+                  <th scope="col">字重</th>
+                  <th scope="col">行高</th>
+                  <th scope="col">字距</th>
+                  <th scope="col">样本</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--fs-display</code></td><td>封面 / 空状态</td><td class="num">34</td><td>700</td><td>40</td><td class="num">-0.032em</td>
+                  <td><span class="type-sample sample-display">让对话安静</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-title</code></td><td>页面标题</td><td class="num">22</td><td>700</td><td>28</td><td class="num">-0.028em</td>
+                  <td><span class="type-sample sample-title">MYRQVIA 设计组</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-headline</code></td><td>强调标题</td><td class="num">17</td><td>650</td><td>22</td><td class="num">-0.021em</td>
+                  <td><span class="type-sample sample-headline">新的会话层级</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-body</code></td><td>聊天正文</td><td class="num">16</td><td>400</td><td>23</td><td class="num">-0.006em</td>
+                  <td><span class="type-sample sample-body">浅色模式的气泡灰可以再冷半度。</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-callout</code></td><td>正文 / 输入</td><td class="num">15</td><td>400</td><td>22</td><td class="num">-0.005em</td>
+                  <td><span class="type-sample sample-callout">消息仅保存在当前浏览器</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-subhead</code></td><td>行标题</td><td class="num">14</td><td>500</td><td>20</td><td class="num">-0.010em</td>
+                  <td><span class="type-sample sample-subhead">聊天字体大小</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-footnote</code></td><td>辅助说明</td><td class="num">13</td><td>400</td><td>18</td><td class="num">-0.006em</td>
+                  <td><span class="type-sample sample-footnote">3 人在线 · 已读</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-caption</code></td><td>状态 / 标签</td><td class="num">11.5</td><td>500</td><td>16</td><td class="num">0.005em</td>
+                  <td><span class="type-sample sample-tiny">发送中… · 14:24</span></td>
+                </tr>
+                <tr>
+                  <td><code>--fs-micro</code></td><td>元信息 / 角标</td><td class="num">10.5</td><td>500</td><td>14</td><td class="num">0.02em</td>
+                  <td><span class="type-sample sample-micro">已置顶 · 免打扰</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">说明</span>
+            会话名 13.8px、聊天标题 14.2px 是对字阶的视觉微调，不新增等级；正文最小 11.5px，低于此值仅限非必要元信息。
+          </p>
+        </div>
+
+        <div class="type-grid">
+          <div class="spec-card specimen-card">
+            <div class="card-head"><h3>排印标本</h3><span class="card-meta">LIVE SPECIMEN</span></div>
+            <div class="type-specimen">
+              <p class="type-display">让对话安静下来。</p>
+              <p class="type-chinese">
+                MYRQVIA 的界面不争夺注意力。标题与正文只差一个层级，说明文字退后半步，
+                <mark>时间与状态留在最轻的位置</mark>，让眼睛先读到人说的话。
+              </p>
+              <p class="type-latin">Quiet confidence, measured in pixels. One accent, solid surfaces, and hairlines doing the work.</p>
+              <p class="type-numerals">0123456789 · 2026.11 · 14:02 · 2.4 MB · 99.9%</p>
+              <div class="type-annotations">
+                <span>中文 16 / 23</span>
+                <span>拉丁同字号</span>
+                <span>数字 tabular-nums</span>
+              </div>
+              <div class="type-weights" aria-label="字重样本">
+                <span class="tw-400">Regular 400</span>
+                <span class="tw-500">Medium 500</span>
+                <span class="tw-600">Semibold 600</span>
+                <span class="tw-700">Bold 700</span>
+              </div>
+              <div class="type-glyphs">
+                <span>中文标点「」、。：；！？</span>
+                <span>Latin Aa Bb Cc</span>
+                <span>Numerals 0123456789</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="spec-card chat-type-card">
+            <div class="card-head"><h3>气泡排印</h3><span class="card-meta">16 / 23</span></div>
+            <div class="chat-type-stage">
+              <div class="d-msg">
+                <span class="avatar avatar-24 tone-sage">林</span>
+                <div class="d-msg-content">
+                  <div class="d-bubble">撤回不是消失，而是一次有秩序的退场。</div>
+                </div>
+              </div>
+              <div class="d-msg is-mine">
+                <div class="d-msg-content">
+                  <div class="d-bubble">已经做了，系统级 prefers-reduced-motion 也接上了。</div>
+                  <span class="d-meta">已读</span>
+                </div>
+              </div>
+            </div>
+            <div class="chat-size-list">
+              <div class="chat-size-item"><span>小</span><span class="chat-size-sample cs-small">消息文字 Aa 0123</span><em>15 / 21.5</em></div>
+              <div class="chat-size-item"><span>标准</span><span class="chat-size-sample cs-standard">消息文字 Aa 0123</span><em>16 / 23</em></div>
+              <div class="chat-size-item"><span>大</span><span class="chat-size-sample cs-large">消息文字 Aa 0123</span><em>17 / 25</em></div>
+              <div class="chat-size-item"><span>特大</span><span class="chat-size-sample cs-xlarge">消息文字 Aa 0123</span><em>18 / 26</em></div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              内边距 8.5 × 13.5，圆角 19，单条最大宽 548。字号由 <code>--chat-fs / --chat-lh</code> 控制，设置页提供 4 档。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           04 — LAYOUT & SPACING
+           ================================================================ -->
+      <section class="section" id="layout" data-section="04 / 布局">
+        <header class="section-head">
+          <span class="sec-num">04</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">LAYOUT &amp; SPACING</p>
+            <h2>布局</h2>
+            <p class="section-lede">
+              桌面是一张两栏的桌面：318px 会话列表，752px 的对话阅读列。手机只保留一条路径，
+              用安全区、50pt 导航与底部输入区建立稳定的手指地图。
+            </p>
+          </div>
+        </header>
+
+        <div class="spec-card anatomy-card">
+          <div class="card-head">
+            <h3>桌面解剖</h3>
+            <span class="card-meta">1440 × 900 · 结构示意，非等比</span>
+          </div>
+          <div class="wire-scroll">
+            <div class="wire-desktop" aria-hidden="true">
+              <div class="wire-sidebar">
+                <div class="wire-side-head"><span class="wire-brand">MYRQVIA</span><span class="wire-pill"></span></div>
+                <div class="wire-search"></div>
+                <div class="wire-row is-active"><span class="wire-av"></span><span class="wire-lines"><i></i><i></i></span></div>
+                <div class="wire-row"><span class="wire-av"></span><span class="wire-lines"><i></i><i></i></span></div>
+                <div class="wire-row"><span class="wire-av"></span><span class="wire-lines"><i></i><i></i></span></div>
+                <div class="wire-row"><span class="wire-av"></span><span class="wire-lines"><i></i><i></i></span></div>
+                <div class="wire-side-foot"><span class="wire-av small"></span><span class="wire-lines"><i></i><i></i></span></div>
+              </div>
+              <div class="wire-main">
+                <div class="wire-chat-head"><span class="wire-title"></span><span class="wire-info"></span></div>
+                <div class="wire-chat-body">
+                  <div class="wire-thread">
+                    <div class="wire-bubble-row"><span class="wire-msg"></span></div>
+                    <div class="wire-bubble-row is-mine"><span class="wire-msg blue"></span></div>
+                    <div class="wire-bubble-row"><span class="wire-msg short"></span></div>
+                    <div class="wire-bubble-row is-mine"><span class="wire-msg blue wide"></span></div>
+                    <div class="wire-bubble-row"><span class="wire-msg"></span></div>
+                  </div>
+                </div>
+                <div class="wire-composer"><span class="wire-plus"></span><span class="wire-field"></span><span class="wire-send"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="anatomy-legend">
+            <div><span class="legend-num">01</span><strong>318</strong><p>侧栏宽，最小 270；1100px 以下降为 292 / 276。</p></div>
+            <div><span class="legend-num">02</span><strong>68</strong><p>聊天顶栏高，1px 底部分割线；手机 50pt。</p></div>
+            <div><span class="legend-num">03</span><strong>752</strong><p>对话列最大阅读宽；两侧 28px 内边距。</p></div>
+            <div><span class="legend-num">04</span><strong>72</strong><p>桌面会话行最小高；手机 72px，头像 48。</p></div>
+            <div><span class="legend-num">05</span><strong>56</strong><p>输入区左右的呼吸边距，气泡与输入框共享中轴。</p></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="spec-card">
+            <div class="card-head"><h3>平板适配</h3><span class="card-meta">BREAKPOINTS</span></div>
+            <table class="breakpoint-table">
+              <thead><tr><th>视口</th><th>侧栏</th><th>对话列</th><th>行为</th></tr></thead>
+              <tbody>
+                <tr><td>≥ 1101</td><td>318</td><td>752</td><td>双栏，完整留白</td></tr>
+                <tr><td>1100–961</td><td>292</td><td>700</td><td>侧栏收紧</td></tr>
+                <tr><td>960–821</td><td>276</td><td>640</td><td>双栏，压缩顶栏</td></tr>
+                <tr><td>≤ 820</td><td>全屏</td><td>100%</td><td>单栏，列表推入 / 返回</td></tr>
+              </tbody>
+            </table>
+            <p class="sample-caption">
+              <span class="cap-k">行为</span>
+              断点只改宽度，不改信息层级；平板保留双栏，直到 820px 才切换为手机式的整页推入。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>阅读宽度</h3><span class="card-meta">MEASURE</span></div>
+            <div class="measure-stage">
+              <div class="measure-outer">
+                <span class="measure-label">752 对话列</span>
+                <div class="measure-inner"><span>548 气泡最大宽</span></div>
+              </div>
+              <div class="measure-axis"><span>0</span><span>548</span><span>752</span></div>
+            </div>
+            <ul class="spec-list">
+              <li><span>中文</span>每行 26–34 个汉字；超过 548px 时增加留白，不拉长行。</li>
+              <li><span>英文</span>每行 60–75 个字符；正文不使用全角标点混排。</li>
+              <li><span>气泡</span>宽度由内容决定，最大不超过 76% 或 548px，取较小值。</li>
+            </ul>
+            <p class="sample-caption">
+              <span class="cap-k">目标</span>
+              阅读时眼睛只在一条稳定的中轴上移动，不追着两边跑。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2 iphone-grid">
+          <div class="spec-card iphone-card">
+            <div class="card-head"><h3>iPhone 解剖</h3><span class="card-meta">390 × 844 · @2x</span></div>
+            <div class="iphone-stage">
+              <div class="phone-wire" aria-hidden="true">
+                <div class="phone-safe-top"><span>59</span></div>
+                <div class="phone-nav"><span class="phone-back"></span><span class="phone-nav-title"></span><span class="phone-nav-info"></span></div>
+                <div class="phone-thread">
+                  <div class="phone-bubble"></div>
+                  <div class="phone-bubble is-mine"></div>
+                  <div class="phone-bubble short"></div>
+                  <div class="phone-bubble is-mine"></div>
+                  <div class="phone-bubble"></div>
+                </div>
+                <div class="phone-composer"><span class="phone-plus"></span><span class="phone-field"></span></div>
+                <div class="phone-safe-bottom"><span>34</span></div>
+              </div>
+              <ul class="phone-notes">
+                <li><span>安全区</span><strong>59pt</strong><p>顶部状态栏；内容从导航下方开始。</p></li>
+                <li><span>导航</span><strong>50pt</strong><p>返回 42pt 热区，标题居中，信息在右。</p></li>
+                <li><span>输入区</span><strong>39pt</strong><p>最小高，随文字增长到 110pt 上限。</p></li>
+                <li><span>底部</span><strong>34pt</strong><p>Home Indicator 安全区，留白不压缩。</p></li>
+              </ul>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">手势</span>
+              列表页到会话页使用 360ms 整页推入；返回时反向。顶部不叠加阴影，用位移表达层级。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>安全区与输入区</h3><span class="card-meta">SAFE AREA</span></div>
+            <table class="breakpoint-table compact">
+              <thead><tr><th>区域</th><th>尺寸</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td>状态栏</td><td>59pt</td><td>由系统绘制，页面不覆盖</td></tr>
+                <tr><td>导航栏</td><td>50pt</td><td>含 8pt 顶部内边距</td></tr>
+                <tr><td>输入框</td><td>39pt</td><td>圆角 19，内边距 8 / 13</td></tr>
+                <tr><td>发送按钮</td><td>29pt</td><td>右侧 5pt，随文字出现</td></tr>
+                <tr><td>底部安全区</td><td>34pt</td><td>加在输入区下方</td></tr>
+              </tbody>
+            </table>
+            <ul class="spec-list">
+              <li><span>键盘</span>输入区跟随键盘上移；对话内容不缩放，只调整可视区。</li>
+              <li><span>回弹</span>滚动使用系统惯性，不在页面级阻止 overscroll。</li>
+              <li><span>横屏</span>导航仍为 50pt，气泡最大宽降为 72%。</li>
+            </ul>
+            <div class="safe-note">
+              <strong>键盘出现时，输入区上移，对话内容保持原位。</strong>
+              <p>可视区变矮时不压缩气泡；只把最新消息滚入视野。底部安全区在键盘上方仍然保留。</p>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">底线</span>
+              任何安全区都不允许被自定义控件覆盖，包括浮动按钮与提示条。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="spec-card">
+            <div class="card-head"><h3>间距</h3><span class="card-meta">4 / 8 GRID</span></div>
+            <div class="space-list">
+              <div class="space-row"><code>--s-1</code><span class="space-bar sp-1"></span><em>4</em><span>图标与文字</span></div>
+              <div class="space-row"><code>--s-2</code><span class="space-bar sp-2"></span><em>8</em><span>行内元素</span></div>
+              <div class="space-row"><code>--s-3</code><span class="space-bar sp-3"></span><em>12</em><span>控件内边距</span></div>
+              <div class="space-row"><code>--s-4</code><span class="space-bar sp-4"></span><em>16</em><span>卡片内边距</span></div>
+              <div class="space-row"><code>--s-5</code><span class="space-bar sp-5"></span><em>20</em><span>区块间距</span></div>
+              <div class="space-row"><code>--s-6</code><span class="space-bar sp-6"></span><em>24</em><span>组件分组</span></div>
+              <div class="space-row"><code>--s-7</code><span class="space-bar sp-7"></span><em>32</em><span>卡片留白</span></div>
+              <div class="space-row"><code>--s-8</code><span class="space-bar sp-8"></span><em>40</em><span>章节呼吸</span></div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规则</span>
+              以 4pt 为原子、8pt 为节奏。16px 以下只允许 4 的倍数；不使用 5、7、13 这类“看起来差不多”的值。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>圆角与发丝线</h3><span class="card-meta">RADII / HAIRLINE</span></div>
+            <div class="radius-grid">
+              <div class="radius-item"><span class="radius-box r-6"></span><code>6</code><em>标签</em></div>
+              <div class="radius-item"><span class="radius-box r-9"></span><code>9</code><em>搜索 / 图标按钮</em></div>
+              <div class="radius-item"><span class="radius-box r-12"></span><code>12</code><em>分组 / 卡片</em></div>
+              <div class="radius-item"><span class="radius-box r-16"></span><code>16</code><em>图片 / 面板</em></div>
+              <div class="radius-item"><span class="radius-box r-22"></span><code>22</code><em>弹层</em></div>
+              <div class="radius-item"><span class="radius-box r-bubble"><i>19</i></span><code>19</code><em>气泡</em></div>
+              <div class="radius-item"><span class="radius-box r-pill"></span><code>999</code><em>胶囊</em></div>
+            </div>
+            <div class="hairline-demo">
+              <div><span class="hairline"></span><code>1px · --separator</code><p>列表、顶栏、卡片</p></div>
+              <div><span class="hairline strong"></span><code>1px · --separator-strong</code><p>聚焦边框、头像</p></div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规则</span>
+              圆角按组件尺寸选择，不叠加。分隔只用 1px 颜色线；不用投影代替结构，也不用 0.5px 缩放模糊。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           05 — COMPONENTS & STATES
+           ================================================================ -->
+      <section class="section" id="components" data-section="05 / 组件">
+        <header class="section-head">
+          <span class="sec-num">05</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">COMPONENTS &amp; STATES</p>
+            <h2>组件</h2>
+            <p class="section-lede">
+              所有样本都直接使用 <code>css/tokens.css</code> 的变量，并与产品渲染保持一致。
+              每个样本下方给出真实尺寸、圆角、颜色与状态行为；静态示例不是可点击控件。
+            </p>
+          </div>
+        </header>
+
+        <div class="component-grid">
+
+          <!-- Navigation -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>导航</h3><span class="card-meta">NAVIGATION · 68PX / 50PT</span></div>
+            <div class="component-stage nav-stage">
+              <div class="stage-label stage-label-nav-a">桌面 · 68px</div>
+              <div class="nav-desktop-demo">
+                <div class="nav-peer">
+                  <span class="nav-peer-name">MYRQVIA 设计组</span>
+                  <span class="nav-peer-sub"><i class="online-dot"></i>3 人在线</span>
+                </div>
+                <span class="nav-icon-btn" aria-hidden="true"><svg class="ico"><use href="#i-info"/></svg></span>
+              </div>
+              <div class="stage-label stage-label-nav-b">iPhone · 50pt</div>
+              <div class="nav-phone-demo">
+                <span class="nav-icon-btn nav-back" aria-hidden="true"><svg class="ico"><use href="#i-back"/></svg></span>
+                <span class="nav-phone-center">
+                  <strong>MYRQVIA 设计组</strong>
+                  <em><i class="online-dot"></i>3 人在线</em>
+                </span>
+                <span class="nav-icon-btn" aria-hidden="true"><svg class="ico"><use href="#i-info"/></svg></span>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              桌面 68px 高、左右 20 / 16 内边距、1px 底部分割线；标题 14.2 / 600，状态 10.2。
+              iPhone 导航 50pt，返回与信息按钮各 42pt 热区，中心标题 14.4 / 600，状态带 5.5px 在线点。
+            </p>
+          </div>
+
+          <!-- Conversation rows -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>会话行</h3><span class="card-meta">CONVERSATION ROW</span></div>
+            <div class="component-stage conversation-stage">
+              <div class="conv-list">
+                <div class="conv-row">
+                  <span class="avatar avatar-44 tone-sage">林<i class="online-dot"></i></span>
+                  <span class="conv-main">
+                    <span class="conv-top"><span class="conv-name">林深</span><time>14:21</time></span>
+                    <span class="conv-bottom"><span class="conv-preview">那版深色模式的对比度我再看一下。</span></span>
+                  </span>
+                </div>
+                <div class="conv-row is-unread">
+                  <span class="avatar avatar-44 tone-clay">棠</span>
+                  <span class="conv-main">
+                    <span class="conv-top"><span class="conv-name">周棠</span><time>13:48</time></span>
+                    <span class="conv-bottom"><span class="conv-preview">撤回动画的缓动曲线发我一下。</span><span class="unread-dot"></span></span>
+                  </span>
+                </div>
+                <div class="conv-row is-active">
+                  <span class="avatar-stack">
+                    <span class="avatar tone-sage">林</span><span class="avatar tone-clay">棠</span><span class="avatar tone-ink">舟</span>
+                  </span>
+                  <span class="conv-main">
+                    <span class="conv-top"><span class="conv-name">MYRQVIA 设计组</span><time>14:24</time></span>
+                    <span class="conv-bottom"><span class="conv-preview">林深：稳。</span></span>
+                  </span>
+                </div>
+                <div class="conv-row">
+                  <span class="avatar avatar-44 tone-rose">妈</span>
+                  <span class="conv-main">
+                    <span class="conv-top"><span class="conv-name">妈妈</span><svg class="conv-flag" aria-hidden="true"><use href="#i-pin"/></svg><time>周一</time></span>
+                    <span class="conv-bottom"><span class="conv-preview">你：好，我明天到。</span></span>
+                  </span>
+                </div>
+                <div class="conv-row">
+                  <span class="avatar avatar-44 tone-stone">产</span>
+                  <span class="conv-main">
+                    <span class="conv-top"><span class="conv-name">产品同步</span><svg class="conv-flag" aria-hidden="true"><use href="#i-muted"/></svg><time>昨天</time></span>
+                    <span class="conv-bottom"><span class="conv-preview">你：先不用，这轮只看交互和视觉。</span></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">状态</span>
+              自上而下：正常 / 未读 / 选中 / 置顶 / 免打扰。行高 72，圆角 11，内边距 8 × 10；
+              悬停 <code>--bg-hover</code>，选中 <code>--bg-selected</code>；未读用 7.5px 蓝点，不改变行高。
+            </p>
+          </div>
+
+          <!-- Avatars -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>头像</h3><span class="card-meta">AVATAR · 5 SIZES</span></div>
+            <div class="component-stage avatar-stage">
+              <div class="avatar-size-row">
+                <div class="avatar-size-item"><span class="avatar avatar-24 tone-sage">屿</span><em>24</em></div>
+                <div class="avatar-size-item"><span class="avatar avatar-32 tone-slate">林</span><em>32</em></div>
+                <div class="avatar-size-item"><span class="avatar avatar-44 tone-clay">棠<i class="online-dot"></i></span><em>44</em></div>
+                <div class="avatar-size-item"><span class="avatar avatar-56 tone-sand">舟</span><em>56</em></div>
+                <div class="avatar-size-item"><span class="avatar avatar-88 tone-ink">默</span><em>88</em></div>
+              </div>
+              <div class="avatar-detail-row">
+                <div class="avatar-detail">
+                  <span class="avatar-stack">
+                    <span class="avatar tone-sage">林</span><span class="avatar tone-clay">棠</span><span class="avatar tone-ink">舟</span>
+                  </span>
+                  <p>群组堆叠<br><span>3 × 27px</span></p>
+                </div>
+                <div class="avatar-detail">
+                  <span class="avatar avatar-56 tone-rose">妈<i class="online-dot"></i></span>
+                  <p>DM 在线点<br><span>11px + 2.5px 描边</span></p>
+                </div>
+              </div>
+              <div class="avatar-tones">
+                <span class="avatar avatar-24 tone-sage"></span>
+                <span class="avatar avatar-24 tone-slate"></span>
+                <span class="avatar avatar-24 tone-clay"></span>
+                <span class="avatar avatar-24 tone-sand"></span>
+                <span class="avatar avatar-24 tone-stone"></span>
+                <span class="avatar avatar-24 tone-ink"></span>
+                <span class="avatar avatar-24 tone-rose"></span>
+              </div>
+              <ul class="avatar-notes">
+                <li><span>色板</span>Sage / Slate / Clay / Sand / Stone / Ink / Rose，全部去饱和，不承担语义。</li>
+                <li><span>回退</span>没有图片时使用姓名首字；不生成随机彩色渐变作为默认头像。</li>
+              </ul>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              字号约为直径的 34%：24 / 9、32 / 11.5、44 / 15、56 / 19、88 / 30。使用低饱和头像色；
+              在线点右下角，描边必须取所在行背景色。
+            </p>
+          </div>
+
+          <!-- Message bubbles -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>消息气泡</h3><span class="card-meta">MESSAGE · 7 FORMS</span></div>
+            <div class="component-stage bubble-stage">
+              <div class="bubble-board">
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>接收</span><em>16 / 23</em></div>
+                  <div class="bubble-item-body">
+                    <span class="avatar avatar-24 tone-sage">林</span>
+                    <div class="d-msg-content"><div class="d-bubble">浅色模式的气泡灰可以再冷半度，现在和侧栏有一点糊在一起。</div></div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>发送</span><em>已读</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">收到，我调成 #EBEBEF，侧栏保持 #F5F5F7。</div>
+                      <span class="d-meta">已读</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>连续</span><em>间距 3px</em></div>
+                  <div class="bubble-item-body">
+                    <span class="avatar avatar-24 tone-clay">棠</span>
+                    <div class="d-msg-content cluster-stack">
+                      <div class="d-bubble">同意，弹窗会打断。</div>
+                      <div class="d-bubble tight-in">未读用一个小蓝点就够。</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>回复</span><em>引用块</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">
+                        <div class="d-quote">
+                          <span>你</span>
+                          <p>今晚我把 iPhone 和桌面两套并在一起发群里。</p>
+                        </div>
+                        记得留减少动态效果的降级。
+                      </div>
+                      <span class="d-meta">已送达</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>文件 · 转发</span><em>258 宽</em></div>
+                  <div class="bubble-item-body">
+                    <span class="avatar avatar-24 tone-clay">棠</span>
+                    <div class="d-msg-content">
+                      <div class="d-bubble file-bubble">
+                        <div class="fwd-label"><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg><span>转发自 周棠</span></div>
+                        <div class="file-card">
+                          <span class="file-glyph"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg><span>PDF</span></span>
+                          <span class="file-meta"><span class="file-name">撤回动效-分镜.pdf</span><span class="file-size">2.4 MB</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>图片</span><em>圆角 16</em></div>
+                  <div class="bubble-item-body">
+                    <span class="avatar avatar-24 tone-slate">舟</span>
+                    <div class="d-msg-content">
+                      <div class="d-bubble image-bubble"><img src="screens/mobile-chat-light.png" alt="设计组分享的移动端界面截图" width="262" height="170"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>回应</span><em>22 高</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="reaction-anchor">
+                        <div class="d-bubble">我把第一版间距改成 8pt 了。</div>
+                        <div class="d-reactions"><span class="d-reaction is-mine">❤️ 2</span><span class="d-reaction">👍 1</span></div>
+                      </div>
+                      <span class="d-meta">已读</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              内边距 8.5 × 13.5，圆角 19；连续消息间距 3px，末条贴边角收紧为 6px。接收 <code>--bubble-in</code>，
+              发送 <code>--bubble-out</code>；单条最大 548px / 76%。文件宽 258，图片圆角 16，回应胶囊高 22、圆角 11、上移 9px。
+            </p>
+          </div>
+
+          <!-- Message states -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>消息状态</h3><span class="card-meta">DELIVERY / FAILURE / RECALL</span></div>
+            <div class="component-stage state-stage">
+              <div class="bubble-board">
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>发送中</span><em>clock</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">我把间距改成 8pt 了。</div>
+                      <span class="d-meta"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>发送中…</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>已送达</span><em>delivered</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">收到，这张卡片不做弹窗。</div>
+                      <span class="d-meta">已送达</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>已读</span><em>read</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">已读回执也接上了。</div>
+                      <span class="d-meta">已读</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>未发送</span><em>failed</em></div>
+                  <div class="bubble-item-body is-mine">
+                    <div class="d-msg-content">
+                      <div class="d-bubble">这条消息没有发出去。</div>
+                      <span class="d-meta is-failed"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>未发送 <span class="retry-link">重试</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bubble-item">
+                  <div class="bubble-item-label"><span>已撤回</span><em>system</em></div>
+                  <div class="bubble-item-body system-row">
+                    <span class="system-line"><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg>你撤回了一条消息</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">行为</span>
+              状态仅出现在最后一条自己的消息下方，10.2px。发送中使用 11px 时钟图标；失败用红色 <code>--red</code>，
+              “重试”为强调蓝；送达 / 已读只换文案，不闪动、不弹窗。撤回后气泡消失，原位换成居中的 10.3px 系统行，不产生布局跳动。
+            </p>
+          </div>
+
+          <!-- Composer -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>输入区</h3><span class="card-meta">COMPOSER · 40 / 39</span></div>
+            <div class="component-stage composer-stage">
+              <div class="composer-demo-wrap">
+                <div class="reply-preview-demo">
+                  <span class="reply-rail"></span>
+                  <span class="reply-copy"><span class="reply-label">回复 林深</span><span class="reply-text">撤回不是消失，而是一次有秩序的退场。</span></span>
+                  <span class="reply-close"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></span>
+                </div>
+                <div class="composer-demo">
+                  <span class="plus-demo" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span>
+                  <div class="field-demo">
+                    <span class="field-text">今晚我把 iPhone 和桌面两套并在…</span>
+                    <span class="send-demo"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></span>
+                  </div>
+                </div>
+              </div>
+              <div class="composer-states">
+                <span><b>空态</b> 发送按钮 opacity 0 / scale .55</span>
+                <span><b>有内容</b> 240ms 弹簧出现</span>
+                <span><b>发送中</b> scale .9 / opacity .7</span>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              桌面输入框最小高 40、圆角 20、内边距 8 × 14，文字 15 / 22；手机最小高 39、圆角 19。发送按钮 30，
+              右侧 5 / 底部 5。回复预览 12 圆角、2.5px 蓝色竖线，高 7 × 10 内边距。
+            </p>
+          </div>
+
+          <!-- Context menu -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>操作菜单与回应</h3><span class="card-meta">STATIC SAMPLE</span></div>
+            <div class="component-stage context-stage">
+              <div class="context-scene" aria-label="消息操作菜单静态示例">
+                <div class="ctx-demo">
+                  <div class="reaction-bar-demo">
+                    <span class="reaction-emoji is-picked">❤️</span>
+                    <span class="reaction-emoji">👍</span>
+                    <span class="reaction-emoji">😂</span>
+                    <span class="reaction-emoji">😮</span>
+                    <span class="reaction-emoji">😢</span>
+                  </div>
+                  <div class="context-menu-demo">
+                    <span class="ctx-demo-item"><svg class="ico" aria-hidden="true"><use href="#i-reply"/></svg>回复</span>
+                    <span class="ctx-demo-item"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg>复制</span>
+                    <span class="ctx-demo-item"><svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>转发</span>
+                    <span class="ctx-separator"></span>
+                    <span class="ctx-demo-item"><svg class="ico" aria-hidden="true"><use href="#i-undo"/></svg>撤回</span>
+                    <span class="ctx-demo-item is-destructive"><svg class="ico" aria-hidden="true"><use href="#i-trash"/></svg>删除</span>
+                  </div>
+                </div>
+                <div class="context-anchor-row">
+                  <span class="avatar avatar-24 tone-clay">棠</span>
+                  <div class="d-bubble">长按菜单的行高用 44 吧，触控面积稳一点。</div>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              菜单宽 252，圆角 14，项高 44，字号 14.6；回应条高 50，圆角 14，emoji 21px，间距均分。
+              静态示例；实际由长按触发，菜单位于气泡上方 10px，超出时翻到下方。
+            </p>
+          </div>
+
+          <!-- Controls -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>控件</h3><span class="card-meta">INTERACTIVE SAMPLE</span></div>
+            <div class="component-stage controls-stage">
+              <div class="control-row">
+                <span>消息提示音</span>
+                <button class="d-switch" type="button" role="switch" aria-checked="true" aria-label="消息提示音示例开关" data-demo-switch><span></span></button>
+              </div>
+              <div class="control-row">
+                <span>显示已读回执</span>
+                <button class="d-switch" type="button" role="switch" aria-checked="false" aria-label="已读回执示例开关" data-demo-switch><span></span></button>
+              </div>
+              <div class="control-block">
+                <span class="control-label">主题</span>
+                <div class="d-segmented" role="group" aria-label="主题示例">
+                  <button type="button" aria-pressed="false" data-demo-seg>跟随系统</button>
+                  <button type="button" aria-pressed="true" data-demo-seg>浅色</button>
+                  <button type="button" aria-pressed="false" data-demo-seg>深色</button>
+                </div>
+              </div>
+              <div class="control-block">
+                <div class="control-label-row"><span class="control-label">聊天字体大小</span><span class="control-value" id="demo-range-value">标准</span></div>
+                <div class="range-demo-row">
+                  <span class="range-a">A</span>
+                  <input class="d-range" id="demo-range" type="range" min="0" max="3" step="1" value="1" aria-label="聊天字体大小示例">
+                  <span class="range-a range-a-lg">A</span>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">状态</span>
+              开关 47 × 28，滑块 24，开启用 <code>--green</code>；分段控件高 29，内边距 2，选中项白底 + 1px 投影。
+              示例可交互，仅用于检查状态，不写入产品设置。
+            </p>
+          </div>
+
+          <!-- Alert -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>确认弹窗</h3><span class="card-meta">ALERT · 292 WIDTH</span></div>
+            <div class="component-stage alert-stage">
+              <div class="alert-demo" role="group" aria-label="确认弹窗静态示例">
+                <div class="alert-copy">
+                  <h4>清除本地演示数据？</h4>
+                  <p>所有会话与偏好会被重置，且无法撤销。</p>
+                </div>
+                <div class="alert-actions">
+                  <span>取消</span>
+                  <span class="is-destructive">清除</span>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              宽 292，圆角 20，正文 12.2 / 1.55，按钮行高 46，左右均分。危险操作使用 <code>--red</code>，
+              不使用整块红底；点击遮罩不关闭破坏性确认。
+            </p>
+          </div>
+
+          <!-- Toast -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>轻提示</h3><span class="card-meta">TOAST · 38 HEIGHT</span></div>
+            <div class="component-stage toast-stage">
+              <div class="toast-scene">
+                <div class="toast-demo" role="status">
+                  <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
+                  <span>已复制到剪贴板</span>
+                </div>
+                <div class="toast-timing" aria-hidden="true">
+                  <span class="toast-seg enter">进入 300ms</span>
+                  <span class="toast-seg hold">停留 1.8s</span>
+                  <span class="toast-seg exit">退出 200ms</span>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              高 38，圆角 19，内边距 0 × 15，字号 12.4；浅色主题用深色底，深色主题反转为浅底。
+              停留 1.8s，进入 300ms 弹簧，退出 200ms 淡出；同屏只保留一条。
+            </p>
+          </div>
+
+          <!-- Empty state -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>空状态</h3><span class="card-meta">EMPTY</span></div>
+            <div class="component-stage empty-stage">
+              <div class="empty-demo">
+                <span class="avatar avatar-64 tone-sage">林</span>
+                <strong>MYRQVIA 设计组</strong>
+                <p>群聊已创建，发条消息开始吧</p>
+                <span>消息仅保存在当前浏览器</span>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              头像 64，标题 19 / 650，说明 12.4 / 1.6，提示 10.5。整体垂直居中，底部多留 60px；不放大插画，不添加按钮。
+            </p>
+          </div>
+
+          <!-- Skeleton -->
+          <div class="spec-card component-card">
+            <div class="card-head"><h3>加载骨架</h3><span class="card-meta">SKELETON</span></div>
+            <div class="component-stage skeleton-stage">
+              <div class="skeleton-list" aria-label="加载骨架示例">
+                <div class="skeleton-row"><span class="sk-avatar"></span><span class="sk-lines"><i style="width:44%"></i><i style="width:72%"></i></span></div>
+                <div class="skeleton-row"><span class="sk-avatar"></span><span class="sk-lines"><i style="width:52%"></i><i style="width:64%"></i></span></div>
+                <div class="skeleton-row"><span class="sk-avatar"></span><span class="sk-lines"><i style="width:38%"></i><i style="width:58%"></i></span></div>
+                <div class="skeleton-row"><span class="sk-avatar"></span><span class="sk-lines"><i style="width:48%"></i><i style="width:68%"></i></span></div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              骨架只模拟行结构，不模拟内容。底色 <code>--bg-fill</code>，圆角 6 / 999，1.8s 低频透明度呼吸；
+              减少动态效果时完全静止。
+            </p>
+          </div>
+
+          <!-- Offline + error -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>离线与重试</h3><span class="card-meta">NETWORK / ERROR</span></div>
+            <div class="component-stage network-stage">
+              <div class="network-bar-demo"><i></i>未连接网络 · 消息将保留在本地</div>
+              <div class="network-thread">
+                <div class="d-bubble">我先离线写，等会儿再同步。</div>
+                <div class="d-msg-content is-mine">
+                  <div class="d-bubble is-mine">这条消息没有发出去。</div>
+                  <span class="d-meta is-failed"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>未发送 <span class="retry-link">重试</span></span>
+                </div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              离线条高 30，底色 <code>--bg-sidebar</code>，6px 橙点，10.8px 文案；失败态不弹窗，只在消息下方给出重试。
+              恢复网络后离线条 240ms 淡出，不推动对话。
+            </p>
+          </div>
+
+          <!-- Announcement -->
+          <div class="spec-card component-card span-2">
+            <div class="card-head"><h3>公告文章</h3><span class="card-meta">ANNOUNCEMENT · 656 WIDTH</span></div>
+            <div class="component-stage announcement-stage">
+              <article class="notice-demo">
+                <div class="notice-meta"><span class="notice-tag">置顶</span><span>2026年11月5日</span><span>MYRQVIA 设计团队</span></div>
+                <h3 class="notice-title">MYRQVIA Chat 2.0 设计内测</h3>
+                <div class="notice-byline">
+                  <span class="avatar avatar-18 tone-ink">N</span>
+                  <span>MYRQVIA 设计团队</span>
+                  <span class="notice-dot">·</span>
+                  <span>3 分钟阅读</span>
+                </div>
+                <div class="notice-body">
+                  <p>2.0 不是一次换皮。我们重写了会话列表的信息密度、移动端的层级关系，以及每一条消息从出现到撤回的动效语言。</p>
+                  <p>这次内测可以体验：重新设计的会话列表与聊天页、长按消息后的原生操作菜单、撤回动效，以及完整的浅色与深色模式。</p>
+                  <blockquote>撤回不是消失，而是一次有秩序的退场。</blockquote>
+                  <p>内测期间，部分能力仍是设计原型。我们会在验证后逐步开放，而不是先做出看起来能用、实际不能用的入口。</p>
+                </div>
+              </article>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规格</span>
+              内容宽 656，左右 36 内边距；标题 27 / 700 / 1.28 / -0.032em，正文 14 / 1.78，引用左侧 2px 竖线。
+              可扫读优先：标签 → 标题 → 署名 → 正文，不使用弹窗。
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================================================================
+           06 — MOTION
+           ================================================================ -->
+      <section class="section" id="motion" data-section="06 / 动效">
+        <header class="section-head">
+          <span class="sec-num">06</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">MOTION</p>
+            <h2>动效</h2>
+            <p class="section-lede">
+              动效只做三件事：解释东西从哪里来、确认一次操作、帮助一段内容退场。
+              所有曲线都短、可控，并且可以被系统级“减少动态效果”一键降级。
+            </p>
+          </div>
+        </header>
+
+        <div class="grid-2">
+          <div class="spec-card">
+            <div class="card-head"><h3>时长</h3><span class="card-meta">DURATION TOKENS</span></div>
+            <table class="motion-table">
+              <thead><tr><th>Token</th><th>值</th><th>使用</th></tr></thead>
+              <tbody>
+                <tr><td><code>--dur-1</code></td><td class="num">120ms</td><td>按压、悬停、开关</td></tr>
+                <tr><td><code>--dur-2</code></td><td class="num">200ms</td><td>淡出、轻提示、减少动态</td></tr>
+                <tr><td><code>--dur-3</code></td><td class="num">300ms</td><td>菜单、回复、弹层出现</td></tr>
+                <tr><td><code>--dur-4</code></td><td class="num">420ms</td><td>整页推入、较大范围变化</td></tr>
+              </tbody>
+            </table>
+            <div class="duration-bars" aria-hidden="true">
+              <div><span>按压</span><i class="db-1"></i><em>120ms</em></div>
+              <div><span>淡出</span><i class="db-2"></i><em>200ms</em></div>
+              <div><span>菜单</span><i class="db-3"></i><em>300ms</em></div>
+              <div><span>整页</span><i class="db-4"></i><em>420ms</em></div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规则</span>
+              进入比退出慢；大面积位移不超过 420ms；任何动效都不能阻塞滚动或输入。
+            </p>
+          </div>
+
+          <div class="spec-card">
+            <div class="card-head"><h3>曲线</h3><span class="card-meta">EASING</span></div>
+            <div class="ease-list">
+              <div class="ease-item">
+                <svg class="ease-curve" viewBox="0 0 96 96" aria-hidden="true"><path class="curve-axis" d="M2 94V2M2 94h92"/><path class="curve-line" d="M2 94 C23 2, 37 2, 94 2"/></svg>
+                <div><code>--ease-out</code><span>cubic-bezier(0.22, 1, 0.36, 1)</span><em>默认进入</em></div>
+              </div>
+              <div class="ease-item">
+                <svg class="ease-curve" viewBox="0 0 96 96" aria-hidden="true"><path class="curve-axis" d="M2 94V2M2 94h92"/><path class="curve-line" d="M2 94 C32 27, 2 2, 94 2"/></svg>
+                <div><code>--ease-ios</code><span>cubic-bezier(0.32, 0.72, 0, 1)</span><em>页面 / 面板推入</em></div>
+              </div>
+              <div class="ease-item">
+                <svg class="ease-curve" viewBox="0 0 96 96" aria-hidden="true"><path class="curve-axis" d="M2 94V2M2 94h92"/><path class="curve-line" d="M2 94 C35 -29, 63 -29, 94 2"/></svg>
+                <div><code>--ease-spring</code><span>cubic-bezier(0.34, 1.3, 0.64, 1)</span><em>小面积弹入</em></div>
+              </div>
+              <div class="ease-item">
+                <svg class="ease-curve" viewBox="0 0 96 96" aria-hidden="true"><path class="curve-axis" d="M2 94V2M2 94h92"/><path class="curve-line" d="M2 94 C40 94, 94 2, 94 2"/></svg>
+                <div><code>--ease-in</code><span>cubic-bezier(0.4, 0, 1, 1)</span><em>退出 / 收起</em></div>
+              </div>
+            </div>
+            <p class="sample-caption">
+              <span class="cap-k">规则</span>
+              弹簧曲线只用于 22px 以内的位移与缩放，不用于整页或长距离滚动。
+            </p>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head"><h3>动作配方</h3><span class="card-meta">FIVE RECIPES</span></div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="MYRQVIA 动作配方表">
+            <table class="recipe-table">
+              <thead><tr><th>动作</th><th>触发</th><th>时长 / 曲线</th><th>变化</th><th>备注</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>消息进入</strong></td><td>发送 / 接收</td><td>280ms · ease-out</td>
+                  <td>opacity 0→1 · translateY 7→0 · scale .995→1</td><td>连续消息不重复整段动画，只保留 3px 间距。</td>
+                </tr>
+                <tr>
+                  <td><strong>页面推入</strong></td><td>列表 → 会话</td><td>360ms · ease-ios</td>
+                  <td>translateX 100%→0；列表 -20% 且 opacity 1→.55</td><td>返回反向；不使用遮罩。</td>
+                </tr>
+                <tr>
+                  <td><strong>弹层弹簧</strong></td><td>设置 / 详情</td><td>340ms · ease-ios + 240ms 透明度</td>
+                  <td>translateY 14→0 · scale .985→1</td><td>遮罩先 240ms 进入，弹层稍后。</td>
+                </tr>
+                <tr>
+                  <td><strong>按钮按压</strong></td><td>点击 / 触摸</td><td>120ms · ease-out</td>
+                  <td>scale 1→.94，释放回 1</td><td>发送按钮从 .55→1 使用 240ms 弹簧。</td>
+                </tr>
+                <tr>
+                  <td><strong>回应弹入</strong></td><td>选择 emoji</td><td>340ms · ease-spring</td>
+                  <td>scale .5→1.08→1</td><td>只缩放胶囊本身，不推动消息。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">统一</span>
+            所有进入都从“靠近最终位置”的方向开始；所有退出都比进入快 20–40%，并且不改变布局。
+          </p>
+        </div>
+
+        <div class="spec-card recall-spec-card">
+          <div class="card-head"><h3>签名动效 · 撤回的退场</h3><span class="card-meta">RECALL DISSOLVE · 1.74S</span></div>
+          <div class="recall-head-grid">
+            <div class="recall-description">
+              <p>
+                撤回不是一次系统删除，而是一句话安静地退场。气泡从右上角开始，被切分为 3–4px 的像素格，
+                沿对角线分三波向左下漂移、旋转、缩小并淡出。方向与阅读方向相反，结尾比开头慢。
+              </p>
+              <dl class="recall-metrics">
+                <div><dt>总时长</dt><dd>1.74s</dd></div>
+                <div><dt>单元格</dt><dd>3–4px</dd></div>
+                <div><dt>旋转</dt><dd>≤ 7°</dd></div>
+                <div><dt>漂移</dt><dd>500–700ms</dd></div>
+              </dl>
+            </div>
+            <div class="recall-timeline">
+              <div class="timeline-track" aria-hidden="true">
+                <span class="wave wave-1" style="left:8.6%;width:14.9%"></span>
+                <span class="wave wave-2" style="left:24.7%;width:15.5%"></span>
+                <span class="wave wave-3" style="left:41.4%;width:14.4%"></span>
+                <span class="wave-tail" style="left:55.8%;width:44.2%"></span>
+              </div>
+              <div class="timeline-labels">
+                <span style="left:0">0</span>
+                <span style="left:23.6%">410</span>
+                <span style="left:40.2%">700</span>
+                <span style="left:55.7%">970</span>
+                <span class="is-end" style="left:100%">1740ms</span>
+              </div>
+              <div class="timeline-legend">
+                <span><i class="dot-wave w1"></i>第一波 150–410ms</span>
+                <span><i class="dot-wave w2"></i>第二波 430–700ms</span>
+                <span><i class="dot-wave w3"></i>第三波 720–970ms</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="recall-spec-grid">
+            <div><span>对角线</span><strong>右上 → 左下</strong><p>以气泡包围盒归一化距离 d 划分波次，d &lt; .30 / .30–.66 / &gt; .66。</p></div>
+            <div><span>粒子</span><strong>先碎，再漂</strong><p>每格 3–4px；先停留 80–120ms，再向左下漂移并缩小淡出。</p></div>
+            <div><span>收尾</span><strong>970 → 1740ms</strong><p>最后一波粒子继续漂移，直到 1.74s 完全清空；不留下残影。</p></div>
+            <div><span>布局</span><strong>零位移</strong><p>气泡原位隐藏；canvas 不进入文档流，滚动位置与后续消息不被推动。</p></div>
+            <div><span>降级</span><strong>200ms 淡出</strong><p>开启减少动态效果时不分粒子、不旋转，只做一次安静的 opacity 变化。</p></div>
+            <div><span>设备</span><strong>DPR 上限 2</strong><p>高分屏最多以 2 倍像素密度栅格化，保证低端设备也能稳定运行。</p></div>
+          </div>
+
+          <div class="recall-demo">
+            <div class="recall-demo-copy">
+              <p class="eyebrow">LIVE DEMO</p>
+              <h3>播放一次退场</h3>
+              <p class="recall-lede">下面的气泡连接到本地 <code>js/recall.js</code>。动画结束后会恢复气泡，方便反复检查。</p>
+              <div class="recall-actions">
+                <button class="btn-primary" id="recall-play" type="button">播放撤回动效</button>
+                <a class="text-link" href="recall-lab.html">打开动效实验台 <span aria-hidden="true">↗</span></a>
+              </div>
+              <p class="recall-status" id="recall-status" role="status" aria-live="polite">等待播放 · 约 1.74s</p>
+              <p class="recall-api"><code>MYRQVIA.recall.play(bubble, { host, reduceMotion })</code></p>
+            </div>
+            <div class="recall-stage" id="recall-host">
+              <div class="recall-thread">
+                <div class="d-msg is-mine">
+                  <div class="d-msg-content">
+                    <div class="d-bubble recall-bubble" id="recall-bubble">我把第一版的间距改成 8pt 了。</div>
+                    <span class="d-meta">已读</span>
+                  </div>
+                </div>
+                <p class="recall-stage-note">演示消息 · 本地渲染</p>
+              </div>
+            </div>
+          </div>
+          <p class="sample-caption">
+            <span class="cap-k">说明</span>
+            演示只作用于上方这一条示例消息，不写入会话数据；减少动态效果开关与系统 <code>prefers-reduced-motion</code> 都会被尊重。
+            若 <code>recall.js</code> 未加载或正在编辑，按钮会显示为不可用，而不是抛出错误。
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           07 — PRINCIPLES & DON'TS
+           ================================================================ -->
+      <section class="section" id="principles" data-section="07 / 原则">
+        <header class="section-head">
+          <span class="sec-num">07</span>
+          <div class="sec-head-main">
+            <p class="eyebrow">PRINCIPLES &amp; DON'TS</p>
+            <h2>原则</h2>
+            <p class="section-lede">
+              设计系统不是更多规则，而是更少例外。下面八条约束用于判断一个新界面是否还属于 MYRQVIA，
+              最后一份清单用于快速排除那些“看起来更高级、实际更吵”的做法。
+            </p>
+          </div>
+        </header>
+
+        <ol class="principle-grid">
+          <li>
+            <span class="principle-num">01</span>
+            <h3>克制</h3>
+            <p>先删除，再添加。一个屏幕只保留一个视觉焦点，装饰不解决问题就不出现。</p>
+          </li>
+          <li>
+            <span class="principle-num">02</span>
+            <h3>层级</h3>
+            <p>用字号、字重、留白和发丝线建立顺序；不靠阴影、彩色块或大面积背景。</p>
+          </li>
+          <li>
+            <span class="principle-num">03</span>
+            <h3>一枚蓝色</h3>
+            <p>强调色只用于可操作与未读。绿色、红色、橙色只表达状态，不参与品牌表达。</p>
+          </li>
+          <li>
+            <span class="principle-num">04</span>
+            <h3>原生动效</h3>
+            <p>动效要解释空间关系。时长短、方向明确、可被系统降级，永远不阻塞输入。</p>
+          </li>
+          <li>
+            <span class="principle-num">05</span>
+            <h3>像素纪律</h3>
+            <p>4 / 8 网格、统一圆角、1px 发丝线。看起来“差不多”的值，最后都会变成不一致。</p>
+          </li>
+          <li>
+            <span class="principle-num">06</span>
+            <h3>诚实的交互</h3>
+            <p>能做的就做，不能做的直接说明。不用 toast 假装功能存在，不用假数据伪装在线。</p>
+          </li>
+          <li>
+            <span class="principle-num">07</span>
+            <h3>明暗对等</h3>
+            <p>深色不是反色。两套主题共享语义与层级，深色单独校准对比、阴影与头像色。</p>
+          </li>
+          <li>
+            <span class="principle-num">08</span>
+            <h3>性能预算</h3>
+            <p>动效只用 transform 与 opacity；图片按容器裁切；本地原型不引入外部字体与脚本。</p>
+          </li>
+        </ol>
+
+        <div class="no-list-card">
+          <div class="no-list-head">
+            <span class="eyebrow">NOT MYRQVIA</span>
+            <h3>这些做法不属于 MYRQVIA</h3>
+          </div>
+          <ul class="no-list">
+            <li><span>×</span>紫色 / 蓝紫渐变作为主视觉</li>
+            <li><span>×</span>整页玻璃拟态、透明卡片堆叠</li>
+            <li><span>×</span>发光、彩色投影、霓虹描边</li>
+            <li><span>×</span>装饰性图标与无意义的插画</li>
+            <li><span>×</span>层层嵌套的圆角卡片</li>
+            <li><span>×</span>用持续动画掩盖加载与等待</li>
+          </ul>
+          <p>
+            如果去掉一个效果之后信息更清楚，那这个效果就不应该存在。
+          </p>
+        </div>
+
+        <div class="closing-line">
+          <p>让内容成为主角，让界面退后半步。</p>
+          <span>MYRQVIA Design · 2026</span>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="spec-footer">
+      <p>MYRQVIA Design · 2026</p>
+      <p>本规范适用于 MYRQVIA Chat 2.0 本地交互原型。尺寸为 CSS 逻辑像素，移动端示意图以 pt 标注。</p>
+      <a href="index.html">返回产品原型 <span aria-hidden="true">↗</span></a>
+    </footer>
+
+  </div>
+</div>
+
+<script src="js/recall.js"></script>
+<script>
+  /* ======================================================================
+     Design system page — theme, navigation, local samples, recall demo
+     ====================================================================== */
+  (function () {
+    'use strict';
+
+    var root = document.documentElement;
+    var themeBtn = document.getElementById('theme-toggle');
+    var themeLabel = document.getElementById('theme-label');
+    var reduceBtn = document.getElementById('reduce-toggle');
+    var themeMeta = document.querySelector('meta[name="theme-color"]');
+    var reduceMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+
+    function readStored(key) {
+      try { return window.localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function writeStored(key, value) {
+      try { window.localStorage.setItem(key, value); } catch (e) { /* no-op */ }
+    }
+
+    /* Theme -------------------------------------------------------------- */
+    function applyTheme(theme, persist) {
+      var dark = theme === 'dark';
+      root.dataset.theme = dark ? 'dark' : 'light';
+      root.style.colorScheme = dark ? 'dark' : 'light';
+      themeBtn.setAttribute('aria-pressed', String(dark));
+      themeBtn.setAttribute('aria-label', dark ? '切换至浅色模式' : '切换至深色模式');
+      if (themeLabel) themeLabel.textContent = dark ? '深色' : '浅色';
+      if (themeMeta) themeMeta.setAttribute('content', dark ? '#0B0B0D' : '#F5F5F7');
+      if (persist) writeStored('myrqvia.spec.theme', theme);
+    }
+
+    applyTheme(root.dataset.theme === 'dark' ? 'dark' : 'light', false);
+    themeBtn.addEventListener('click', function () {
+      applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
+    });
+
+    /* Reduced motion ----------------------------------------------------- */
+    var storedReduce = readStored('myrqvia.spec.reduce');
+    var reduceOn = storedReduce !== null
+      ? storedReduce === 'true'
+      : !!(reduceMedia && reduceMedia.matches);
+
+    function isReduce() {
+      return reduceOn || !!(reduceMedia && reduceMedia.matches);
+    }
+
+    function applyReduce(value, persist) {
+      reduceOn = value;
+      root.dataset.reduceMotion = value ? 'true' : 'false';
+      reduceBtn.setAttribute('aria-pressed', String(value));
+      reduceBtn.classList.toggle('is-on', value);
+      if (persist) writeStored('myrqvia.spec.reduce', String(value));
+      updateRecallStatus();
+    }
+
+    reduceBtn.addEventListener('click', function () {
+      applyReduce(!reduceOn, true);
+    });
+    applyReduce(reduceOn, false);
+
+    /* Section navigation -------------------------------------------------- */
+    var sections = Array.prototype.slice.call(document.querySelectorAll('main section[data-section]'));
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
+    var mobileSelect = document.getElementById('mobile-select');
+    var topCurrent = document.getElementById('topbar-current');
+    var currentId = '';
+
+    function setActive(id) {
+      if (id === currentId) return;
+      currentId = id;
+      var index = 0;
+      sections.forEach(function (section, i) {
+        if (section.id === id) index = i;
+        var link = navLinks[i];
+        if (link) {
+          link.classList.toggle('is-active', section.id === id);
+          if (section.id === id) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        }
+      });
+      if (mobileSelect) mobileSelect.value = id;
+      if (topCurrent && sections[index]) topCurrent.textContent = sections[index].dataset.section;
+    }
+
+    var navTicking = false;
+    function updateActive() {
+      navTicking = false;
+      var active = sections[0];
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].getBoundingClientRect().top <= 132) active = sections[i];
+      }
+      var atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      if (atBottom && sections.length) active = sections[sections.length - 1];
+      if (active) setActive(active.id);
+    }
+    function requestActive() {
+      if (navTicking) return;
+      navTicking = true;
+      window.requestAnimationFrame(updateActive);
+    }
+    window.addEventListener('scroll', requestActive, { passive: true });
+    window.addEventListener('resize', requestActive);
+    updateActive();
+
+    if (mobileSelect) {
+      mobileSelect.addEventListener('change', function () {
+        var target = document.getElementById(mobileSelect.value);
+        if (!target) return;
+        target.scrollIntoView({ behavior: isReduce() ? 'auto' : 'smooth', block: 'start' });
+        try { history.replaceState(null, '', '#' + mobileSelect.value); } catch (e) { /* no-op */ }
+      });
+    }
+
+    /* Local component samples -------------------------------------------- */
+    Array.prototype.forEach.call(document.querySelectorAll('[data-demo-switch]'), function (switchBtn) {
+      switchBtn.addEventListener('click', function () {
+        var next = switchBtn.getAttribute('aria-checked') !== 'true';
+        switchBtn.setAttribute('aria-checked', String(next));
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-demo-seg]'), function (segBtn) {
+      segBtn.addEventListener('click', function () {
+        var group = segBtn.parentNode;
+        Array.prototype.forEach.call(group.querySelectorAll('[data-demo-seg]'), function (item) {
+          item.setAttribute('aria-pressed', String(item === segBtn));
+        });
+      });
+    });
+
+    var demoRange = document.getElementById('demo-range');
+    var demoRangeValue = document.getElementById('demo-range-value');
+    var rangeLabels = ['小', '标准', '大', '特大'];
+    function updateDemoRange() {
+      if (!demoRange) return;
+      var value = Number(demoRange.value);
+      demoRange.style.setProperty('--fill', (value / 3 * 100) + '%');
+      if (demoRangeValue) demoRangeValue.textContent = rangeLabels[value] || '标准';
+    }
+    if (demoRange) {
+      demoRange.addEventListener('input', updateDemoRange);
+      updateDemoRange();
+    }
+
+    /* Live recall demo ---------------------------------------------------- */
+    var playBtn = document.getElementById('recall-play');
+    var recallStatus = document.getElementById('recall-status');
+    var recallBubble = document.getElementById('recall-bubble');
+    var recallHost = document.getElementById('recall-host');
+    var recallApi = window.MYRQVIA && window.MYRQVIA.recall;
+    var playing = false;
+
+    function recallAvailable() {
+      return !!(recallApi && typeof recallApi.play === 'function');
+    }
+
+    function recallUsesFade() {
+      return isReduce() || (recallAvailable() && recallApi.supports === false);
+    }
+
+    function restoreBubble() {
+      if (!recallBubble) return;
+      recallBubble.removeAttribute('style');
+    }
+
+    function updateRecallStatus() {
+      if (!recallStatus || playing) return;
+      if (!recallAvailable()) {
+        recallStatus.textContent = '动效模块未加载 · 演示暂不可用';
+        return;
+      }
+      recallStatus.textContent = recallUsesFade()
+        ? '等待播放 · 减少动态效果：200ms 淡出'
+        : '等待播放 · 约 1.74s';
+    }
+
+    function finishDemo(message) {
+      playing = false;
+      if (recallHost) recallHost.classList.remove('is-playing');
+      restoreBubble();
+      if (playBtn) {
+        playBtn.disabled = false;
+        playBtn.textContent = '播放撤回动效';
+      }
+      if (recallStatus) recallStatus.textContent = message;
+    }
+
+    if (!recallAvailable()) {
+      if (playBtn) {
+        playBtn.disabled = true;
+        playBtn.setAttribute('aria-disabled', 'true');
+        playBtn.classList.add('is-disabled');
+      }
+      if (recallStatus) recallStatus.textContent = '动效模块未加载 · 演示暂不可用';
+    } else if (playBtn) {
+      playBtn.addEventListener('click', function () {
+        if (playing || !recallBubble || !recallHost) return;
+        playing = true;
+        restoreBubble();
+        void recallBubble.offsetWidth;
+        if (recallHost) recallHost.classList.add('is-playing');
+        playBtn.disabled = true;
+        playBtn.textContent = '播放中…';
+        if (recallStatus) recallStatus.textContent = recallUsesFade() ? '正在淡出 · 200ms' : '正在退场 · 1.74s';
+
+        var result;
+        try {
+          result = recallApi.play(recallBubble, {
+            host: recallHost,
+            reduceMotion: isReduce()
+          });
+        } catch (err) {
+          finishDemo('播放未完成 · 请重试');
+          return;
+        }
+        Promise.resolve(result).then(function () {
+          finishDemo(recallUsesFade() ? '完成 · 200ms 淡出' : '完成 · 1.74s 粒子退场');
+        }, function () {
+          finishDemo('播放未完成 · 请重试');
+        });
+      });
+      updateRecallStatus();
+    }
+
+    /* Keep the demo clean after resize / re-entry ------------------------- */
+    window.addEventListener('pageshow', function () {
+      if (!playing) restoreBubble();
+    });
+  })();
+</script>
+</body>
+</html>
