@@ -1,0 +1,1243 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="myrqvia-probe" content="">
+  <title>MYRQVIA · 撤回动效实验台</title>
+  <link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/typography.css">
+  <style>
+    /* =====================================================================
+       MYRQVIA motion lab — calm, solid, hairline-only.
+       ===================================================================== */
+    :root {
+      --lab-bg: #f5f5f7;
+      --lab-card: #ffffff;
+      --lab-hairline: rgba(17, 17, 19, 0.08);
+      --lab-thumb-bg: #ffffff;
+      --toggle-knob: #ffffff;
+      --seg-on-bg: #ffffff;
+      --seg-on-shadow: 0 0 0 0.5px rgba(17, 17, 19, 0.08), 0 1px 2px rgba(17, 17, 19, 0.06);
+      --range-track: #e4e4e9;
+      --timing-track: #ececf1;
+    }
+    html[data-theme="dark"] {
+      --lab-bg: #0b0b0d;
+      --lab-card: #1c1c1f;
+      --lab-hairline: rgba(255, 255, 255, 0.09);
+      --lab-thumb-bg: #1c1c1f;
+      --toggle-knob: #f2f2f5;
+      --seg-on-bg: #2f2f33;
+      --seg-on-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.35);
+      --range-track: #35353a;
+      --timing-track: #2a2a2e;
+    }
+
+    html, body { height: auto; }
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--lab-bg);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      line-height: 1.45;
+      letter-spacing: var(--track-normal);
+      overflow: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 56px 24px 64px;
+    }
+
+    /* --- masthead ------------------------------------------------------- */
+    .masthead { margin-bottom: 8px; }
+    .kicker {
+      margin: 0 0 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+    .masthead h1 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.022em;
+      color: var(--text-primary);
+    }
+    .lede {
+      margin: 12px 0 0;
+      max-width: 640px;
+      font-size: 15px;
+      line-height: 1.62;
+      color: var(--text-secondary);
+    }
+
+    /* --- cards ---------------------------------------------------------- */
+    .card {
+      margin-top: 18px;
+      background: var(--lab-card);
+      border: 1px solid var(--lab-hairline);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .card-pad { padding: 20px 24px; }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+    }
+    .card-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.005em;
+      color: var(--text-primary);
+    }
+    .card-title .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .head-note {
+      font-size: 11.5px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+    .head-tools { display: flex; align-items: center; gap: 10px; }
+
+    /* --- chat preview --------------------------------------------------- */
+    .chat {
+      position: relative;
+      height: 400px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(127, 127, 135, 0.28) transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 14px;
+      padding: 18px 22px 72px;
+      border-top: 1px solid var(--lab-hairline);
+      background: var(--lab-card);
+    }
+    .chat::-webkit-scrollbar { width: 8px; }
+    .chat::-webkit-scrollbar-thumb {
+      background: rgba(127, 127, 135, 0.26);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+    .day {
+      align-self: center;
+      font-size: 11.5px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.01em;
+      padding: 2px 0;
+    }
+    .row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .row.out { justify-content: flex-end; }
+    .row.in { justify-content: flex-start; }
+    .avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: none;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 2px;
+      user-select: none;
+    }
+    .avatar-sage { background: var(--av-sage); }
+    .avatar-clay { background: var(--av-clay); }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      max-width: 78%;
+    }
+    .row.out .stack { align-items: flex-end; }
+
+    .bubble {
+      display: inline-block;
+      max-width: 560px;
+      padding: 8px 14px;
+      border-radius: var(--r-bubble);
+      font-size: var(--chat-fs);
+      line-height: var(--chat-lh);
+      letter-spacing: -0.006em;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .bubble.in {
+      background: var(--bubble-in);
+      color: var(--bubble-in-text);
+      box-shadow: var(--bubble-shadow);
+    }
+    .bubble.out {
+      background: var(--bubble-out);
+      color: var(--bubble-out-text);
+    }
+    .meta {
+      font-size: 11.5px;
+      color: var(--text-tertiary);
+      padding: 0 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* file attachment bubble content */
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 3px 0;
+      min-width: 196px;
+    }
+    .file-icon {
+      width: 34px; height: 34px;
+      flex: none;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.18);
+    }
+    .file-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .file-name {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-size {
+      font-size: 12.5px;
+      line-height: 1.35;
+      color: var(--bubble-out-muted);
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 11px 20px;
+      border-top: 1px solid var(--lab-hairline);
+      font-size: 11.5px;
+      color: var(--text-tertiary);
+    }
+    .card-foot .status {
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+    .card-foot .hint { color: var(--text-tertiary); }
+
+    /* --- controls ------------------------------------------------------- */
+    .ctrl-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+    .ctrl-line + .ctrl-line {
+      border-top: 1px solid var(--lab-hairline);
+      padding-top: 16px;
+      padding-bottom: 18px;
+    }
+    .ctrl-line.second { gap: 12px; }
+    .field-label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      min-width: 56px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 18px;
+      border-radius: 11px;
+      background: var(--accent);
+      color: var(--text-on-accent);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      transition: background-color 140ms var(--ease-out), transform 140ms var(--ease-out),
+        opacity 140ms linear;
+    }
+    .btn-primary:hover { background: var(--accent-pressed); }
+    .btn-primary:active { transform: scale(0.985); }
+    .btn-primary:disabled { opacity: 0.45; cursor: default; transform: none; }
+    .btn-primary svg { width: 11px; height: 12px; fill: currentColor; }
+
+    .seg {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px;
+      border-radius: 11px;
+      background: var(--bg-fill);
+    }
+    .seg button {
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out);
+    }
+    .seg button:hover { color: var(--text-primary); }
+    .seg button.is-on {
+      background: var(--seg-on-bg);
+      color: var(--text-primary);
+      box-shadow: var(--seg-on-shadow);
+    }
+    .seg-sm button { min-height: 26px; padding: 0 10px; font-size: 12px; border-radius: 7px; }
+
+    /* switch */
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      margin-left: auto;
+    }
+    .switch input {
+      position: absolute;
+      width: 1px; height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .switch-track {
+      position: relative;
+      width: 40px; height: 24px;
+      flex: none;
+      border-radius: 999px;
+      background: var(--bg-fill-strong);
+      transition: background-color 180ms var(--ease-out);
+    }
+    .switch-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--toggle-knob);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+      transition: transform 180ms var(--ease-ios);
+    }
+    .switch input:checked + .switch-track { background: var(--accent); }
+    .switch input:checked + .switch-track .switch-thumb { transform: translateX(16px); }
+    .switch input:focus-visible + .switch-track { box-shadow: var(--focus-ring); }
+    .switch-label { font-size: 13px; color: var(--text-secondary); }
+
+    /* --- frames --------------------------------------------------------- */
+    .scrub-row { padding: 4px 20px 0; }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      display: block;
+      width: 100%;
+      height: 26px;
+      margin: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 999px;
+      background: var(--range-track);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      margin-top: -8px;
+      border-radius: 50%;
+      background: var(--toggle-knob);
+      border: 1px solid var(--lab-hairline);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    }
+    input[type="range"]::-moz-range-track {
+      height: 4px; border-radius: 999px; background: var(--range-track);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--toggle-knob);
+      border: 1px solid var(--lab-hairline);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    }
+    input[type="range"]:focus-visible { outline: none; }
+    input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: var(--focus-ring); }
+    .scrub-ticks {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 2px 0;
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+    .frame-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 14px 20px 18px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .frame-actions-right { display: flex; gap: 7px; margin-left: auto; }
+    .chip {
+      min-height: 30px;
+      padding: 0 11px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: var(--bg-fill);
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out);
+    }
+    .chip:hover { background: var(--bg-fill-hover); color: var(--text-primary); }
+    .chip.is-on {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .chip-ghost {
+      background: transparent;
+      border-color: var(--lab-hairline);
+      color: var(--text-secondary);
+    }
+    .chip-ghost:hover { background: var(--bg-fill); }
+    .chip:disabled { opacity: 0.5; cursor: default; }
+
+    .filmstrip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--lab-hairline);
+    }
+    .filmstrip[hidden] { display: none; }
+    .frame { margin: 0; min-width: 0; }
+    .frame canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 7px;
+      border: 1px solid var(--lab-hairline);
+      background: var(--lab-thumb-bg);
+    }
+    .frame figcaption {
+      margin-top: 5px;
+      text-align: center;
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* --- timing --------------------------------------------------------- */
+    .rhythm {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      padding: 8px 20px 0;
+    }
+    .rhythm-row {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) 216px;
+      align-items: center;
+      gap: 14px;
+    }
+    .rhythm-name { font-size: 12.5px; color: var(--text-secondary); }
+    .rhythm-track {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--timing-track);
+      overflow: hidden;
+    }
+    .bar {
+      position: absolute;
+      top: 0; bottom: 0;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+    .bar.fade { opacity: 0.16; }
+    .rhythm-value {
+      font-size: 11.5px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .rhythm-legend {
+      display: flex;
+      gap: 16px;
+      padding: 10px 20px 0;
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-swatch {
+      width: 14px; height: 8px; border-radius: 999px; background: var(--accent);
+    }
+    .legend-swatch.fade { opacity: 0.16; }
+    .timing-note {
+      margin: 0;
+      padding: 16px 20px 20px;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .timing-note b { font-weight: 600; color: var(--text-primary); }
+
+    /* --- footnote ------------------------------------------------------- */
+    .footnote {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 0 4px;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 720px) {
+      .page { padding: 36px 16px 48px; }
+      .masthead h1 { font-size: 28px; }
+      .chat { padding: 16px 14px 64px; }
+      .rhythm-row { grid-template-columns: 44px minmax(0, 1fr); }
+      .rhythm-value { display: none; }
+      .filmstrip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .switch { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <p class="kicker">MYRQVIA · Motion Lab</p>
+    <h1>撤回动效实验台</h1>
+    <p class="lede">
+      消息本体从右上角起笔，沿对角线方向分三波解为细碎粒子。单粒子 0.44–0.60s 收束，整体 1.74s；
+      深色模式下颜色直接取自气泡位图。
+    </p>
+  </header>
+
+  <section class="card" aria-label="对话预览">
+    <div class="card-head">
+      <div class="card-title"><span class="dot"></span>对话预览</div>
+      <div class="head-tools">
+        <div class="seg seg-sm" id="themeSeg" role="group" aria-label="主题">
+          <button type="button" data-theme-opt="light" class="is-on" aria-pressed="true">浅色</button>
+          <button type="button" data-theme-opt="dark" aria-pressed="false">深色</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat" id="chatHost" data-recall-host>
+      <div class="day">今天 21:04</div>
+
+      <div class="row in">
+        <div class="avatar avatar-sage" aria-hidden="true">林</div>
+        <div class="stack">
+          <div class="bubble in">会议改到明天上午？</div>
+        </div>
+      </div>
+
+      <div class="row out">
+        <div class="stack">
+          <div class="bubble out">可以，十点前我都在。</div>
+        </div>
+      </div>
+
+      <div class="row out target" id="targetRow">
+        <div class="avatar avatar-clay" id="targetAvatar" aria-hidden="true" hidden>林</div>
+        <div class="stack">
+          <div class="bubble out" id="targetBubble">稳。</div>
+          <div class="meta" id="targetMeta">21:07 · 已送达</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-foot">
+      <span class="status" id="statusText">就绪 · 捕获 foreignObject · DPR 2</span>
+      <span class="hint">撤回完成后由业务层替换该消息行</span>
+    </div>
+  </section>
+
+  <section class="card" aria-label="播放控制">
+    <div class="ctrl-line">
+      <button type="button" class="btn-primary" id="playBtn">
+        <svg viewBox="0 0 12 14" aria-hidden="true"><path d="M1 1.3c0-.9 1-1.4 1.7-.9l8 5.7c.6.4.6 1.4 0 1.8l-8 5.7c-.7.5-1.7 0-1.7-.9V1.3z"/></svg>
+        播放撤回动效
+      </button>
+      <div class="seg" id="speedSeg" role="group" aria-label="播放速度">
+        <button type="button" data-speed="1" class="is-on" aria-pressed="true">1×</button>
+        <button type="button" data-speed="0.25" aria-pressed="false">慢放 0.25×</button>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="reduceToggle">
+        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        <span class="switch-label">减少动态效果</span>
+      </label>
+    </div>
+    <div class="ctrl-line second">
+      <span class="field-label">气泡类型</span>
+      <div class="seg" id="typeSeg" role="group" aria-label="气泡类型">
+        <button type="button" data-type="blue" class="is-on" aria-pressed="true">短句 · 蓝色</button>
+        <button type="button" data-type="gray" aria-pressed="false">收到 · 灰色</button>
+        <button type="button" data-type="long" aria-pressed="false">长文本</button>
+        <button type="button" data-type="file" aria-pressed="false">文件</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-label="逐帧检视">
+    <div class="card-head">
+      <div class="card-title">逐帧检视</div>
+      <div class="head-note" id="freezeLabel">未定格</div>
+    </div>
+    <div class="scrub-row">
+      <input type="range" id="scrubber" min="0" max="1300" step="20" value="0" aria-label="定格时间">
+      <div class="scrub-ticks" aria-hidden="true">
+        <span>0</span><span>200</span><span>400</span><span>600</span><span>800</span><span>1000</span><span>1300 ms</span>
+      </div>
+    </div>
+    <div class="frame-actions">
+      <div class="chips" id="frameChips">
+        <button type="button" class="chip" data-freeze="0">0 ms</button>
+        <button type="button" class="chip" data-freeze="200">200 ms</button>
+        <button type="button" class="chip" data-freeze="400">400 ms</button>
+        <button type="button" class="chip" data-freeze="600">600 ms</button>
+        <button type="button" class="chip" data-freeze="800">800 ms</button>
+        <button type="button" class="chip" data-freeze="1000">1000 ms</button>
+        <button type="button" class="chip" data-freeze="1300">1300 ms</button>
+      </div>
+      <div class="frame-actions-right">
+        <button type="button" class="chip chip-ghost" id="clearFrame">回到原状</button>
+        <button type="button" class="chip chip-ghost" id="makeStrip">生成帧带</button>
+      </div>
+    </div>
+    <div class="filmstrip" id="filmstrip" hidden aria-label="分解帧带"></div>
+  </section>
+
+  <section class="card" aria-label="动效节奏">
+    <div class="card-head">
+      <div class="card-title">三波节奏</div>
+      <div class="head-note">d = 距右上角的归一化距离</div>
+    </div>
+    <div class="rhythm" aria-hidden="true">
+      <div class="rhythm-row">
+        <span class="rhythm-name">第一波</span>
+        <div class="rhythm-track">
+          <span class="bar" style="left:8.62%; width:14.94%"></span>
+          <span class="bar fade" style="left:23.56%; width:34.48%"></span>
+        </div>
+        <span class="rhythm-value">150–410ms · d &lt; 0.30</span>
+      </div>
+      <div class="rhythm-row">
+        <span class="rhythm-name">第二波</span>
+        <div class="rhythm-track">
+          <span class="bar" style="left:24.71%; width:15.52%"></span>
+          <span class="bar fade" style="left:40.23%; width:34.48%"></span>
+        </div>
+        <span class="rhythm-value">430–700ms · 0.30–0.66</span>
+      </div>
+      <div class="rhythm-row">
+        <span class="rhythm-name">第三波</span>
+        <div class="rhythm-track">
+          <span class="bar" style="left:41.38%; width:14.37%"></span>
+          <span class="bar fade" style="left:55.75%; width:34.48%"></span>
+        </div>
+        <span class="rhythm-value">720–970ms · d &gt; 0.66</span>
+      </div>
+    </div>
+    <div class="rhythm-legend" aria-hidden="true">
+      <span class="legend-item"><span class="legend-swatch"></span>释放窗口</span>
+      <span class="legend-item"><span class="legend-swatch fade"></span>单粒子漂移淡出</span>
+    </div>
+    <p class="timing-note">
+      三波在时间上轻微交叠：前一波的粒子尚未完全消失，下一波已从更靠左下的位置起笔。
+      每片碎屑完成 <b>0.44–0.60s</b> 的漂移（向左下 <b>45–190 / 40–150 px/s</b>）、
+      <b>3–7°</b> 旋转、缩放至约 <b>0.3</b> 并淡出；最迟在 <b>1.74s</b> 收束。
+      减少动态效果时改为 <b>200ms</b> 的安静淡出，不产生粒子。
+    </p>
+  </section>
+
+  <footer class="footnote">
+    <span>MYRQVIA Chat 2.0 · 撤回动效规范</span>
+    <span id="probeNote">capture · foreignObject · DPR 2</span>
+  </footer>
+</div>
+
+<script src="js/recall.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------------ */
+  // DOM
+  /* ------------------------------------------------------------------ */
+  var host = document.getElementById('chatHost');
+  var bubble = document.getElementById('targetBubble');
+  var targetRow = document.getElementById('targetRow');
+  var avatar = document.getElementById('targetAvatar');
+  var meta = document.getElementById('targetMeta');
+  var playBtn = document.getElementById('playBtn');
+  var speedSeg = document.getElementById('speedSeg');
+  var typeSeg = document.getElementById('typeSeg');
+  var themeSeg = document.getElementById('themeSeg');
+  var reduceToggle = document.getElementById('reduceToggle');
+  var scrubber = document.getElementById('scrubber');
+  var freezeLabel = document.getElementById('freezeLabel');
+  var frameChips = document.getElementById('frameChips');
+  var clearFrameBtn = document.getElementById('clearFrame');
+  var makeStripBtn = document.getElementById('makeStrip');
+  var filmstrip = document.getElementById('filmstrip');
+  var statusText = document.getElementById('statusText');
+  var probeNote = document.getElementById('probeNote');
+  var probeMeta = document.querySelector('meta[name="myrqvia-probe"]');
+
+  var params = new URLSearchParams(window.location.search);
+
+  /* ------------------------------------------------------------------ */
+  // Content
+  /* ------------------------------------------------------------------ */
+  var FILE_HTML =
+    '<div class="file-row">' +
+      '<span class="file-icon" aria-hidden="true">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+          '<path d="M7 3.5h7l4.5 4.5v12.5h-11.5z"/>' +
+          '<path d="M14 3.5V8h4.5"/>' +
+          '<path d="M9.5 13.5h5M9.5 17h3.5"/>' +
+        '</svg>' +
+      '</span>' +
+      '<span class="file-text">' +
+        '<span class="file-name">产品评审纪要.pdf</span>' +
+        '<span class="file-size">2.4 MB · PDF</span>' +
+      '</span>' +
+    '</div>';
+
+  var TYPES = {
+    blue:  { dir: 'out', html: '稳。', meta: '21:07 · 已送达' },
+    gray:  { dir: 'in',  html: '到家了说一声，路上慢点。', meta: '21:07' },
+    long:  { dir: 'out', html: '明天下午三点，老地方见。我把那家店的位置发你了，路上别急，到了先坐一会儿。', meta: '21:07 · 已送达' },
+    file:  { dir: 'out', html: FILE_HTML, meta: '21:07 · 已送达' }
+  };
+
+  /* ------------------------------------------------------------------ */
+  // State
+  /* ------------------------------------------------------------------ */
+  var state = {
+    type: 'blue',
+    theme: 'light',
+    speed: 1,
+    busy: false,
+    frozen: null,
+    pendingFreeze: null,
+    freezeTimer: 0,
+    restoreTimer: 0,
+    info: null
+  };
+
+  /* ------------------------------------------------------------------ */
+  // Helpers
+  /* ------------------------------------------------------------------ */
+  function rectOf(el) {
+    if (!el) return null;
+    var r = el.getBoundingClientRect();
+    return {
+      left: round2(r.left), top: round2(r.top),
+      width: round2(r.width), height: round2(r.height),
+      right: round2(r.right), bottom: round2(r.bottom)
+    };
+  }
+  function round2(v) { return Math.round(v * 100) / 100; }
+
+  function snapshot() {
+    return {
+      scrollTop: host.scrollTop,
+      scrollHeight: host.scrollHeight,
+      scrollWidth: host.scrollWidth,
+      clientHeight: host.clientHeight
+    };
+  }
+
+  function setPressed(group, attr, value) {
+    var buttons = group.querySelectorAll('button');
+    for (var i = 0; i < buttons.length; i++) {
+      var on = buttons[i].getAttribute(attr) === String(value);
+      buttons[i].classList.toggle('is-on', on);
+      buttons[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+
+  function captureLabel(info) {
+    if (!info || !info.mounted) return '无可捕获位图';
+    return info.mounted.capture === 'foreignObject' ? 'foreignObject 捕获' : '近似捕获（回退）';
+  }
+
+  function writeProbe(info) {
+    state.info = info;
+    try {
+      probeMeta.setAttribute('content', JSON.stringify(info));
+    } catch (e) { /* ignore */ }
+    window.__myrqviaLastProbe = info;
+  }
+
+  function readCanvasDiag(canvas) {
+    if (!canvas) return null;
+    var d = canvas.dataset;
+    return {
+      capture: d.myrqviaCapture || '',
+      captureMs: Number(d.myrqviaCaptureMs || 0),
+      hostMode: d.myrqviaHost || '',
+      pads: d.myrqviaPads || '',
+      cells: Number(d.myrqviaCells || 0),
+      dust: Number(d.myrqviaDust || 0),
+      glint: d.myrqviaGlint === '1',
+      scrollHeightDelta: Number(d.myrqviaScrollHeightDelta || 0),
+      scrollWidthDelta: Number(d.myrqviaScrollWidthDelta || 0),
+      scrollTopDelta: Number(d.myrqviaScrollTopDelta || 0),
+      rect: rectOf(canvas)
+    };
+  }
+
+  function updateStatusLine(info) {
+    if (!info) return;
+    if (info.mode === 'freeze') {
+      statusText.textContent = '定格 ' + info.freezeAt + ' ms · ' + captureLabel(info) +
+        ' · 滚动容器未位移';
+    } else if (info.mode === 'play') {
+      if (info.reduce) {
+        statusText.textContent = '减少动态效果 · 200ms 淡出 · 无粒子';
+      } else {
+        var delta = info.mounted ? info.mounted.scrollHeightDelta : 0;
+        statusText.textContent = captureLabel(info) + ' · 用时 ' + info.elapsedMs +
+          ' ms · scrollHeight Δ' + delta;
+      }
+    } else if (info.mode === 'strip') {
+      statusText.textContent = '帧带已生成 · ' + info.frames.length + ' 帧 · ' + captureLabel(info);
+    }
+    if (info.mounted) {
+      probeNote.textContent = 'capture · ' + info.mounted.capture + ' · DPR 2 · ' +
+        info.mounted.cells + ' cells';
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Theme / type / speed
+  /* ------------------------------------------------------------------ */
+  function applyTheme(theme, silent) {
+    state.theme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    setPressed(themeSeg, 'data-theme-opt', theme);
+    if (!silent) clearFrozen();
+  }
+
+  function applyType(type, silent) {
+    var spec = TYPES[type];
+    if (!spec) return;
+    if (!silent) clearFrozen();
+    state.type = type;
+    bubble.style.visibility = '';
+    bubble.className = 'bubble ' + spec.dir;
+    bubble.innerHTML = spec.html;
+    meta.textContent = spec.meta;
+    targetRow.className = 'row ' + spec.dir + ' target';
+    avatar.hidden = spec.dir === 'out';
+    setPressed(typeSeg, 'data-type', type);
+    host.scrollTop = 0;
+  }
+
+  function setSpeed(speed) {
+    state.speed = speed;
+    setPressed(speedSeg, 'data-speed', speed);
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Freeze handling
+  /* ------------------------------------------------------------------ */
+  function removeFrozenCanvas() {
+    if (state.frozen && state.frozen.parentNode) state.frozen.parentNode.removeChild(state.frozen);
+    state.frozen = null;
+  }
+
+  function clearFrozen() {
+    removeFrozenCanvas();
+    bubble.style.visibility = '';
+    freezeLabel.textContent = '未定格';
+    var chips = frameChips.querySelectorAll('.chip');
+    for (var i = 0; i < chips.length; i++) chips[i].classList.remove('is-on');
+  }
+
+  function scheduleFreeze(ms) {
+    state.pendingFreeze = ms;
+    window.clearTimeout(state.freezeTimer);
+    state.freezeTimer = window.setTimeout(flushFreeze, 150);
+  }
+
+  function flushFreeze() {
+    if (state.busy || state.pendingFreeze === null) return;
+    var ms = state.pendingFreeze;
+    state.pendingFreeze = null;
+    freezeAtFrame(ms);
+  }
+
+  function baseInfo(mode) {
+    return {
+      mode: mode,
+      type: state.type,
+      theme: state.theme,
+      speed: state.speed,
+      reduce: false,
+      viewport: { width: window.innerWidth, height: window.innerHeight, dpr: window.devicePixelRatio || 1 },
+      host: snapshot(),
+      hostRect: rectOf(host),
+      bubbleRect: rectOf(bubble),
+      originalVisibilityBefore: window.getComputedStyle(bubble).visibility
+    };
+  }
+
+  function freezeAtFrame(ms) {
+    if (state.busy) { scheduleFreeze(ms); return Promise.resolve(); }
+    var info = baseInfo('freeze');
+    info.freezeAt = ms;
+    state.busy = true;
+    clearFrozen();
+    bubble.style.visibility = '';
+    playBtn.disabled = true;
+    var start = performance.now();
+
+    return MYRQVIA.recall.play(bubble, {
+      host: host,
+      freezeAt: ms,
+      reduceMotion: false,
+      onProgress: function (p) { info.progress = p; }
+    }).then(function () {
+      state.busy = false;
+      playBtn.disabled = false;
+      var canvas = host.querySelector('canvas.myrqvia-recall-canvas');
+      state.frozen = canvas || null;
+      info.elapsedMs = Math.round(performance.now() - start);
+      info.mounted = readCanvasDiag(canvas);
+      info.hostAfterMount = snapshot();
+      info.bubbleVisibilityAfter = window.getComputedStyle(bubble).visibility;
+      writeProbe(info);
+      updateStatusLine(info);
+      freezeLabel.textContent = '定格 ' + ms + ' ms';
+      scrubber.value = String(Math.min(1300, ms));
+      var chips = frameChips.querySelectorAll('.chip');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.toggle('is-on', Number(chips[i].dataset.freeze) === Number(ms));
+      }
+      if (state.pendingFreeze !== null) flushFreeze();
+    }, function () {
+      state.busy = false;
+      playBtn.disabled = false;
+      clearFrozen();
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Play
+  /* ------------------------------------------------------------------ */
+  function play() {
+    if (state.busy) return Promise.resolve();
+    state.pendingFreeze = null;
+    window.clearTimeout(state.freezeTimer);
+    state.busy = true;
+    playBtn.disabled = true;
+    clearFrozen();
+    bubble.style.visibility = '';
+    window.clearTimeout(state.restoreTimer);
+
+    var info = baseInfo('play');
+    info.reduce = reduceToggle.checked;
+    var start = performance.now();
+    var mountedOnce = false;
+
+    return MYRQVIA.recall.play(bubble, {
+      host: host,
+      speed: state.speed,
+      reduceMotion: reduceToggle.checked,
+      onProgress: function (p) {
+        info.progress = p;
+        if (!mountedOnce) {
+          var canvas = host.querySelector('canvas.myrqvia-recall-canvas');
+          if (canvas) {
+            mountedOnce = true;
+            info.mounted = readCanvasDiag(canvas);
+            info.hostDuring = snapshot();
+          }
+        }
+      }
+    }).then(function () {
+      state.busy = false;
+      playBtn.disabled = false;
+      info.elapsedMs = Math.round(performance.now() - start);
+      info.hostAfter = snapshot();
+      info.bubbleVisibilityAfter = window.getComputedStyle(bubble).visibility;
+      info.canvasRemaining = host.querySelectorAll('canvas.myrqvia-recall-canvas').length;
+      info.heldFrozenCanvas = state.frozen ? 1 : 0;
+      writeProbe(info);
+      updateStatusLine(info);
+      // Lab convenience: bring the demo bubble back so the page stays usable.
+      state.restoreTimer = window.setTimeout(function () {
+        if (!state.busy && !state.frozen) {
+          bubble.style.visibility = '';
+          if (statusText.textContent.indexOf('已还原') === -1) {
+            statusText.textContent += ' · 气泡已还原（演示）';
+          }
+        }
+      }, 1300);
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Filmstrip
+  /* ------------------------------------------------------------------ */
+  var STRIP_FRAMES = [0, 200, 400, 600, 800, 1000, 1300];
+
+  function makeStrip() {
+    if (state.busy) return Promise.resolve();
+    state.busy = true;
+    playBtn.disabled = true;
+    makeStripBtn.disabled = true;
+    makeStripBtn.textContent = '生成中…';
+    clearFrozen();
+    filmstrip.hidden = false;
+    filmstrip.innerHTML = '';
+    var info = baseInfo('strip');
+    info.frames = [];
+    var chain = Promise.resolve();
+
+    STRIP_FRAMES.forEach(function (ms) {
+      chain = chain.then(function () {
+        if (state.frozen) { removeFrozenCanvas(); state.frozen = null; }
+        bubble.style.visibility = '';
+        return MYRQVIA.recall.play(bubble, { host: host, freezeAt: ms, reduceMotion: false }).then(function () {
+          var canvas = host.querySelector('canvas.myrqvia-recall-canvas');
+          if (!canvas) return;
+          if (!info.mounted) info.mounted = readCanvasDiag(canvas);
+          info.frames.push(ms);
+          var thumbW = 168;
+          var thumbH = Math.max(40, Math.round(thumbW * canvas.height / canvas.width));
+          var thumb = document.createElement('canvas');
+          thumb.width = thumbW * 2;
+          thumb.height = thumbH * 2;
+          var tctx = thumb.getContext('2d');
+          var cardColor = window.getComputedStyle(document.documentElement)
+            .getPropertyValue('--lab-card').trim() || '#ffffff';
+          tctx.fillStyle = cardColor;
+          tctx.fillRect(0, 0, thumb.width, thumb.height);
+          tctx.drawImage(canvas, 0, 0, thumb.width, thumb.height);
+          var fig = document.createElement('figure');
+          fig.className = 'frame';
+          var cap = document.createElement('figcaption');
+          cap.textContent = ms + ' ms';
+          fig.appendChild(thumb);
+          fig.appendChild(cap);
+          filmstrip.appendChild(fig);
+          if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+          bubble.style.visibility = '';
+        });
+      });
+    });
+
+    chain.then(function () {
+      state.busy = false;
+      playBtn.disabled = false;
+      makeStripBtn.disabled = false;
+      makeStripBtn.textContent = '生成帧带';
+      freezeLabel.textContent = '帧带 · ' + info.frames.length + ' 帧';
+      clearFrozenChipsOnly();
+      writeProbe(info);
+      updateStatusLine(info);
+    }, function () {
+      state.busy = false;
+      playBtn.disabled = false;
+      makeStripBtn.disabled = false;
+      makeStripBtn.textContent = '生成帧带';
+      clearFrozen();
+    });
+    return chain;
+  }
+
+  function clearFrozenChipsOnly() {
+    var chips = frameChips.querySelectorAll('.chip');
+    for (var i = 0; i < chips.length; i++) chips[i].classList.remove('is-on');
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Events
+  /* ------------------------------------------------------------------ */
+  playBtn.addEventListener('click', play);
+
+  speedSeg.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-speed]');
+    if (!btn) return;
+    setSpeed(Number(btn.dataset.speed));
+  });
+
+  typeSeg.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-type]');
+    if (!btn) return;
+    applyType(btn.dataset.type);
+  });
+
+  themeSeg.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-theme-opt]');
+    if (!btn) return;
+    applyTheme(btn.dataset.themeOpt);
+  });
+
+  reduceToggle.addEventListener('change', function () {
+    if (state.busy) return;
+    clearFrozen();
+    statusText.textContent = reduceToggle.checked
+      ? '减少动态效果已开启 · 播放时仅 200ms 淡出'
+      : '就绪 · 捕获 foreignObject · DPR 2';
+  });
+
+  scrubber.addEventListener('input', function () {
+    var ms = Number(scrubber.value);
+    freezeLabel.textContent = '定格 ' + ms + ' ms';
+    scheduleFreeze(ms);
+  });
+
+  frameChips.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-freeze]');
+    if (!btn) return;
+    var ms = Number(btn.dataset.freeze);
+    state.pendingFreeze = null;
+    window.clearTimeout(state.freezeTimer);
+    freezeAtFrame(ms);
+  });
+
+  clearFrameBtn.addEventListener('click', function () {
+    if (state.busy) return;
+    state.pendingFreeze = null;
+    window.clearTimeout(state.freezeTimer);
+    clearFrozen();
+    statusText.textContent = '已回到原始状态';
+  });
+
+  makeStripBtn.addEventListener('click', makeStrip);
+
+  /* ------------------------------------------------------------------ */
+  // Query params (screenshot + verification hooks)
+  // ------------------------------------------------------------------ */
+  function afterLayout(fn) {
+    var run = function () {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(fn);
+      });
+    };
+    if (document.readyState === 'complete') run();
+    else window.addEventListener('load', run, { once: true });
+  }
+
+  function applyParams() {
+    var theme = params.get('theme');
+    if (theme === 'dark' || theme === 'light') applyTheme(theme, true);
+
+    var type = params.get('bubble');
+    if (TYPES[type]) applyType(type, true);
+
+    var speed = parseFloat(params.get('speed'));
+    if (speed === 0.25 || speed === 1) setSpeed(speed);
+
+    if (params.get('reduce') === '1') reduceToggle.checked = true;
+
+    var freezeParam = params.get('freeze');
+    if (freezeParam !== null && freezeParam !== '') {
+      var ms = parseFloat(freezeParam);
+      // Start synchronously: for screenshot mode the async capture then runs
+      // while the page is still loading, which keeps headless virtual-time
+      // captures deterministic.
+      if (isFinite(ms)) freezeAtFrame(Math.max(0, Math.min(1300, ms)));
+    } else if (params.get('play') === '1') {
+      afterLayout(play);
+    }
+
+    if (params.get('strip') === '1') {
+      afterLayout(function () { makeStrip(); });
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Boot
+  /* ------------------------------------------------------------------ */
+  applyTheme('light', true);
+  applyType('blue', true);
+  setSpeed(1);
+  applyParams();
+
+  // Re-assert freeze after load: covers any late layout/font shift while the
+  // capture is still pending (and keeps CLI screenshots stable).
+  if (params.get('freeze') !== null && params.get('freeze') !== '') {
+    var freezeMs = Math.max(0, Math.min(1300, parseFloat(params.get('freeze')) || 0));
+    window.addEventListener('load', function () {
+      if (!state.busy && !state.frozen) freezeAtFrame(freezeMs);
+    }, { once: true });
+  }
+
+  /* ------------------------------------------------------------------ */
+  // Boot
+  /* ------------------------------------------------------------------ */
+  applyTheme('light', true);
+  applyType('blue', true);
+  setSpeed(1);
+  applyParams();
+
+  // small internal API for automated verification
+  window.__myrqviaLab = {
+    play: play,
+    freeze: freezeAtFrame,
+    clearFrozen: clearFrozen,
+    makeStrip: makeStrip,
+    applyType: applyType,
+    applyTheme: applyTheme,
+    getState: function () {
+      return {
+        busy: state.busy,
+        type: state.type,
+        theme: state.theme,
+        frozen: !!state.frozen,
+        info: state.info
+      };
+    }
+  };
+})();
+</script>
+</body>
+</html>
