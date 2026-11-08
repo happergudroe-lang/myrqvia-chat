@@ -1,0 +1,496 @@
+/* ==========================================================================
+   MYRQVIA — global typography layer
+   Loaded last on every page. This is the single source of truth for voice,
+   weight, leading and tracking. Component CSS keeps layout/colour only.
+   ========================================================================== */
+
+html {
+  font-family: var(--font-ui);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  margin-top: 0;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--type-display-size);
+  font-weight: var(--type-display-weight);
+  line-height: var(--type-display-leading);
+  letter-spacing: var(--type-display-tracking);
+}
+h2 {
+  font-size: var(--type-page-size);
+  font-weight: var(--type-page-weight);
+  line-height: var(--type-page-leading);
+  letter-spacing: var(--type-page-tracking);
+}
+h3 {
+  font-size: var(--type-title-size);
+  font-weight: var(--type-title-weight);
+  line-height: var(--type-title-leading);
+  letter-spacing: var(--type-title-tracking);
+}
+h4, h5, h6 {
+  font-size: var(--type-card-size);
+  font-weight: var(--type-card-weight);
+  line-height: var(--type-card-leading);
+  letter-spacing: var(--type-card-tracking);
+}
+
+p, li, dd, dt, figcaption {
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+}
+small, .caption, .meta, .hint, .description, .sub, .subtitle {
+  font-weight: var(--type-desc-weight);
+  line-height: var(--type-desc-leading);
+  letter-spacing: var(--type-desc-tracking);
+}
+strong, b {
+  font-weight: var(--weight-bold);
+}
+em { font-style: italic; font-weight: inherit; }
+
+button, input, textarea, select {
+  font-family: var(--font-ui);
+  font-synthesis: none;
+}
+button, .btn, .button, .auth-primary, .friend-submit {
+  font-weight: var(--type-button-weight);
+  letter-spacing: var(--type-button-tracking);
+}
+input, textarea, select {
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
+}
+input::placeholder, textarea::placeholder {
+  font-weight: var(--weight-regular);
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Auth surface
+   -------------------------------------------------------------------------- */
+body .auth-head h1 {
+  font-size: clamp(25px, 6.2vw, 29px);
+  font-weight: var(--weight-bold);
+  line-height: 1.14;
+  letter-spacing: -0.036em;
+}
+body .auth-head p:last-child {
+  max-width: 34ch;
+  font-size: 13px;
+  font-weight: var(--weight-light);
+  line-height: 1.62;
+  letter-spacing: -0.004em;
+}
+body .auth-brand .brand-name {
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.075em;
+}
+body .brand-edition {
+  font-weight: var(--weight-light);
+  letter-spacing: 0.1em;
+}
+body .auth-to {
+  font-size: 12.5px;
+  font-weight: var(--weight-light);
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+body .auth-to b {
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+}
+body .field > label,
+body .field-control > label {
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+body .field-control:focus-within > label,
+body .field.has-value .field-control > label,
+body .field:has(input:not(:placeholder-shown)) .field-control > label {
+  font-weight: var(--weight-medium);
+}
+body .field input {
+  font-size: 15px;
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.01em;
+}
+body .field-control-username input,
+body .username-prefix {
+  font-family: var(--font-ui);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+body .field-hint {
+  font-size: 11px;
+  font-weight: var(--weight-light);
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+body .field-error {
+  font-size: 11px;
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+}
+body .auth-primary {
+  font-size: 12.5px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.035em;
+}
+body .text-button {
+  font-size: 12px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+body .auth-card-foot,
+body .site-foot,
+body .auth-mode {
+  font-weight: var(--weight-light);
+  letter-spacing: 0.005em;
+}
+body .code-box {
+  font-size: 21px;
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+body .code-success-text {
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0;
+}
+body .verified-pill,
+body .verified-pill > span:last-child {
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+body .success-capsule-copy strong {
+  font-size: 14.5px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.016em;
+}
+body .success-capsule-copy > span {
+  font-size: 11px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Messenger shell
+   -------------------------------------------------------------------------- */
+body .brand-word {
+  font-size: 12.5px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.19em;
+}
+body .brand-version {
+  font-size: 9.5px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0.03em;
+}
+body .rail-label,
+body .tabbar-label {
+  font-size: 9px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.01em;
+}
+body .chat-row-name {
+  font-size: 13.8px;
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.012em;
+}
+body .chat-row.is-unread .chat-row-name {
+  font-weight: var(--weight-semibold);
+}
+body .chat-row-time {
+  font-size: 10.5px;
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.005em;
+}
+body .chat-row-preview {
+  font-size: 12.2px;
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.003em;
+}
+body .chat-row.is-unread .chat-row-preview {
+  font-weight: var(--weight-regular);
+}
+body .chat-row-flags,
+body .unread-count {
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+body .list-empty,
+body .compose-empty,
+body .page-note {
+  font-size: 12px;
+  font-weight: var(--weight-light);
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+body #peer-name {
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.016em;
+}
+body #peer-sub {
+  font-size: 10.5px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .msg-sender {
+  font-size: 10.2px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.003em;
+}
+body .bubble {
+  font-size: var(--chat-fs, 13.5px);
+  font-weight: var(--weight-regular);
+  line-height: var(--chat-lh, 1.55);
+  letter-spacing: -0.004em;
+}
+body .msg-meta,
+body .msg-time {
+  font-size: 10px;
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.005em;
+}
+body .notice-title,
+body .notice-more-title {
+  font-size: 17px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.022em;
+}
+body .notice-copy,
+body .notice-p,
+body .notice-list li {
+  font-size: 13.5px;
+  font-weight: var(--weight-regular);
+  line-height: 1.72;
+}
+body .notice-meta,
+body .notice-byline,
+body .notice-more-date,
+body .notice-copy .caption {
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .notice-tag {
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+}
+body .info-name,
+body .settings-profile-name {
+  font-size: 20px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.028em;
+}
+body .info-sub,
+body .settings-profile-id,
+body .settings-profile-state,
+body .info-member-sub,
+body .info-foot {
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .info-label,
+body .row-label,
+body .settings-label {
+  font-size: 13.5px;
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.005em;
+}
+body .info-value,
+body .row-value,
+body .settings-value {
+  font-size: 12.5px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .info-section,
+body .group-label {
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.015em;
+}
+body .info-member-name,
+body .contact-name,
+body .contact-page-name {
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.008em;
+}
+body .contact-note,
+body .contact-page-status,
+body .info-member-role {
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .search-field input {
+  font-size: 12.8px;
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.004em;
+}
+body .search-hint {
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .composer textarea,
+body #message-input {
+  font-size: var(--chat-fs, 13.5px);
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.004em;
+}
+body .sheet-title,
+body .overlay-title {
+  font-size: 17px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.022em;
+}
+body .sheet-text-btn {
+  font-weight: var(--weight-medium);
+}
+body .tab-page-head h1,
+body .page-head h1 {
+  font-size: clamp(28px, 3.2vw, 34px);
+  font-weight: var(--weight-semibold);
+  line-height: 1.1;
+  letter-spacing: -0.038em;
+}
+body .page-eyebrow,
+body .eyebrow,
+body .kicker,
+body .topbar-kicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0.16em;
+}
+body .status-time,
+body .m-notice-kicker {
+  font-weight: var(--weight-light);
+  letter-spacing: 0.02em;
+}
+body .chat-empty-title,
+body .reply-label,
+body .bubble-quote-name,
+body .notice-tag {
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+body .page-sub {
+  font-size: 12px;
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+body .profile-name {
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.025em;
+}
+body .profile-handle,
+body .profile-id,
+body .profile-note,
+body .profile-seen {
+  font-weight: var(--weight-light);
+  letter-spacing: 0;
+}
+
+/* Status and numeric emphasis */
+body .status-ico,
+body .receipt,
+body .date-separator,
+body .chat-day,
+body .time-separator {
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+}
+body .numeric,
+body .counter,
+body .badge-count {
+  font-weight: var(--type-numeric-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dark theme keeps the same hierarchy; only colour changes. */
+html[data-theme="dark"] body {
+  font-weight: var(--type-body-weight);
+}
+
+/* --------------------------------------------------------------------------
+   Small-screen optical corrections: keep hierarchy, avoid cramped CJK.
+   -------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  body .auth-head h1 {
+    font-size: 24px;
+    letter-spacing: -0.034em;
+  }
+  body .auth-head p:last-child {
+    font-size: 12.5px;
+  }
+  body .field input { font-size: 16px; }
+  body .tab-page-head h1,
+  body .page-head h1 {
+    font-size: 30px;
+    letter-spacing: -0.035em;
+  }
+  body .bubble { letter-spacing: -0.003em; }
+}
+
+/* iOS control geometry for the messenger shell --------------------------- */
+body .search-field,
+body .composer-field,
+body .friend-field {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--bg-fill);
+  box-shadow: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+body .search-field:focus-within,
+body .composer-field:focus-within,
+body .friend-field:focus-within {
+  border-color: rgba(10, 124, 255, 0.45);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+body .composer-field { border-radius: 14px; }
+body .composer textarea,
+body #message-input {
+  border-radius: 12px;
+  background: transparent;
+}
+body .sheet {
+  border: 1px solid var(--separator);
+  border-radius: 20px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+}
+body .info-group .group,
+body .group {
+  border-radius: 12px;
+}
+body .page-action {
+  border-radius: 50%;
+  background: var(--bg-fill);
+}
+body .page-action:hover { background: var(--bg-fill-hover); }
+
