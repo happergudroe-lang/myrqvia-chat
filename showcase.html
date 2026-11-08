@@ -1,0 +1,537 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F5F5F7">
+  <title>MYRQVIA Chat 2.0 · 设计交付</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/showcase.css">
+<link rel="stylesheet" href="css/typography.css">
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1.6c.48 5.2 3.6 8.32 8.8 8.8-5.2.48-8.32 3.6-8.8 8.8-.48-5.2-3.6-8.32-8.8-8.8 5.2-.48 8.32-3.6 8.8-8.8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.8 12h14.4M13.8 6.6 19.2 12l-5.4 5.4"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.3 5.3 6.7 6.7-6.7 6.7"/></symbol>
+  <symbol id="status-icons" viewBox="0 0 76 14">
+    <rect x="0" y="9" width="3" height="5" rx="1" fill="currentColor"/>
+    <rect x="5" y="7" width="3" height="7" rx="1" fill="currentColor"/>
+    <rect x="10" y="4.5" width="3" height="9.5" rx="1" fill="currentColor"/>
+    <rect x="15" y="2" width="3" height="12" rx="1" fill="currentColor"/>
+    <path d="M24.2 5.2a9.2 9.2 0 0 1 11.6 0M26.4 8a6 6 0 0 1 7.2 0M28.7 10.8a2.8 2.8 0 0 1 2.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="30" cy="13" r="1" fill="currentColor"/>
+    <rect x="52" y="3.6" width="19" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+    <rect x="54.2" y="5.8" width="13.2" height="6.4" rx="1.6" fill="currentColor"/>
+    <path d="M72.4 6.4v5.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="MYRQVIA Chat 原型">
+      <svg class="brand-mark" aria-hidden="true"><use href="#i-spark"></use></svg>
+      <span class="brand-word">MYRQVIA</span>
+      <span class="brand-sub">Chat 2.0</span>
+    </a>
+    <nav class="topnav" aria-label="页面导航">
+      <a href="design-system.html">视觉规范</a>
+      <a href="recall-lab.html">动效实验台</a>
+      <a class="top-cta" href="index.html">打开交互原型</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================================================================== -->
+  <!-- Hero                                                               -->
+  <!-- ================================================================== -->
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow"><i class="eyebrow-dot"></i>DESIGN DELIVERY · NOV 2026</p>
+      <h1>MYRQVIA<br><span class="hero-line">Messenger <em>2.0</em></span></h1>
+      <p class="hero-lead">不是另一个聊天网页。是一款按原生应用的标准重新设计的现代通讯产品：克制的层级、精确的留白、真实可用的交互，以及一次只属于 MYRQVIA 的消息撤回。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="index.html">打开交互原型 <svg class="ico" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        <a class="btn btn-ghost" href="design-system.html">查看视觉规范</a>
+      </div>
+      <dl class="hero-meta">
+        <div><dt>Platform</dt><dd>iPhone · iPad · Desktop</dd></div>
+        <div><dt>Mode</dt><dd>Light &amp; Dark</dd></div>
+        <div><dt>Prototype</dt><dd>Local · 60fps</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero-visual">
+      <figure class="phone phone-hero is-dark">
+        <div class="phone-screen">
+          <img src="screens/mobile-chat-dark.png" alt="MYRQVIA Chat iPhone 深色聊天界面">
+          <div class="island" aria-hidden="true"></div>
+          <div class="statusbar" aria-hidden="true">
+            <span class="status-time">9:41</span>
+            <svg class="status-icons"><use href="#status-icons"></use></svg>
+          </div>
+          <div class="home-bar" aria-hidden="true"></div>
+        </div>
+      </figure>
+      <p class="hero-caption">iPhone · 390 × 844 · Dark</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Principles                                                         -->
+  <!-- ================================================================== -->
+  <section class="section" id="principles">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <div>
+        <p class="eyebrow">Design principles</p>
+        <h2>克制不是少做，<br>而是让每个元素都有理由。</h2>
+      </div>
+    </div>
+    <div class="principles">
+      <article>
+        <span class="principle-num">01</span>
+        <h3>视觉重心</h3>
+        <p>每屏只有一个主角。会话里是内容，列表里是未读，设置里是正在被修改的那一项。其余后退为结构。</p>
+      </article>
+      <article>
+        <span class="principle-num">02</span>
+        <h3>原生触感</h3>
+        <p>44pt 触控行高、iOS 系统圆角与运动曲线、真实的安全区适配。像系统组件，而不是像网页控件。</p>
+      </article>
+      <article>
+        <span class="principle-num">03</span>
+        <h3>真实交互</h3>
+        <p>展示出来的按钮都有事可做：发送、回应、转发、撤回、搜索、切换主题。没有服务端支持的能力就不出现。</p>
+      </article>
+      <article>
+        <span class="principle-num">04</span>
+        <h3>统一的气质</h3>
+        <p>一个蓝色、一套字号、一种间距节奏。从 iPhone 到桌面，所有页面看起来都由同一个团队完成。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Desktop                                                            -->
+  <!-- ================================================================== -->
+  <section class="section" id="desktop">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <div>
+        <p class="eyebrow">Desktop · 1440 × 900</p>
+        <h2>会话与聊天，<br>在同一条视线里。</h2>
+        <p class="section-lead">左侧 318px 会话栏，右侧 752px 阅读宽度的聊天列。没有常驻的资料栏，没有多余的工具栏；信息通过独立面板按需出现。</p>
+      </div>
+    </div>
+
+    <div class="desktop-shots">
+      <figure class="shot">
+        <div class="shot-frame">
+          <img src="screens/desktop-chat-light.png" alt="MYRQVIA Chat 桌面端浅色聊天界面">
+        </div>
+        <figcaption><span><b>桌面端 · 浅色</b>会话列表 / 群聊 / 已读状态 / 文件消息</span><span>1440 × 900</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-frame">
+          <img src="screens/desktop-chat-dark.png" alt="MYRQVIA Chat 桌面端深色聊天界面">
+        </div>
+        <figcaption><span><b>桌面端 · 深色</b>同一套结构，只是把光关掉</span><span>1440 × 900</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="secondary">
+      <div class="secondary-head">
+        <h3>按需出现的系统页面</h3>
+        <p>设置、公告、资料与长按菜单都从当前语境中浮出，不打断会话。</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="桌面端系统页面">
+        <button class="tab is-active" type="button" role="tab" aria-selected="true" data-title="设置" data-cap="外观 / 字体大小 / 减少动态效果 / 已读回执" data-img="screens/desktop-settings-light.png">设置</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-title="公告" data-cap="排版优先的公告阅读页，不做打断式弹窗" data-img="screens/desktop-notice-light.png">公告</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-title="长按菜单" data-cap="回应、回复、复制、转发、撤回与删除，全部在锚点附近完成" data-img="screens/desktop-context-light.png">长按菜单</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-title="详细信息" data-cap="按需从右侧滑出，不占用常驻空间" data-img="screens/desktop-info-light.png">详细信息</button>
+      </div>
+      <figure class="shot tab-stage">
+        <div class="shot-frame">
+          <img id="secondary-img" src="screens/desktop-settings-light.png" alt="桌面端设置面板">
+        </div>
+        <figcaption><span><b id="secondary-title">设置</b><span id="secondary-cap">外观 / 字体大小 / 减少动态效果 / 已读回执</span></span><span>1440 × 900</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- iPhone                                                             -->
+  <!-- ================================================================== -->
+  <section class="section" id="iphone">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <div>
+        <p class="eyebrow">iPhone · 390 × 844</p>
+        <h2>手机不是缩小的桌面，<br>是完整的另一个产品。</h2>
+        <p class="section-lead">全屏聊天、原生导航栏、安全区输入框、会话列表与聊天页之间的推入转场。返回键真的回到会话列表，键盘弹出时输入区自然上移。</p>
+      </div>
+    </div>
+
+    <div class="phone-grid">
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-chat-light.png" alt="iPhone 聊天浅色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>聊天 · Light</b><span>蓝色气泡 / 群聊感 / 已读回执</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone is-dark">
+          <div class="phone-screen">
+            <img src="screens/mobile-chat-dark.png" alt="iPhone 聊天深色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>聊天 · Dark</b><span>纯黑 OLED 基底 / 同一层级体系</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-list-light.png" alt="iPhone 会话列表浅色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>会话列表 · Light</b><span>公告入口 / 未读小蓝点 / 置顶</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone is-dark">
+          <div class="phone-screen">
+            <img src="screens/mobile-list-dark.png" alt="iPhone 会话列表深色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>会话列表 · Dark</b><span>低对比层次 / 头像与未读仍有秩序</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-context-light.png" alt="iPhone 长按消息菜单">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>长按菜单</b><span>回应 / 回复 / 转发 / 撤回 / 删除</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-settings-light.png" alt="iPhone 设置浅色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>设置 · Light</b><span>主题 / 字体 / 动效 / 隐私开关</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone is-dark">
+          <div class="phone-screen">
+            <img src="screens/mobile-settings-dark.png" alt="iPhone 设置深色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>设置 · Dark</b><span>分组卡片 / 绿色开关 / 原生行高</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-notice-light.png" alt="iPhone 公告浅色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>公告 · Light</b><span>可扫读的排版 / 更多公告</span></figcaption>
+      </figure>
+
+      <figure class="phone-card">
+        <div class="phone is-dark">
+          <div class="phone-screen">
+            <img src="screens/mobile-notice-dark.png" alt="iPhone 公告深色">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>公告 · Dark</b><span>深色下的阅读层级仍然成立</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="tablet-block" id="tablet">
+      <div class="tablet-copy">
+        <p class="eyebrow">iPad · 834 × 1112</p>
+        <h3>平板不是被拉伸的手机，<br>是自然收拢的分栏。</h3>
+        <p>宽度跨过 820px 后，玻璃导航、会话栏与聊天列自然并置；没有突然多出来的工具栏，也没有被浪费的空间。</p>
+        <p class="tablet-note">同一套结构，在 834px 竖屏下保持完整的阅读节奏。</p>
+      </div>
+      <figure class="tablet-figure">
+        <div class="tablet-frame">
+          <img src="screens/tablet-chat-light.png" alt="MYRQVIA Chat iPad 分栏布局">
+        </div>
+        <figcaption>iPad · Light · 834 × 1112</figcaption>
+      </figure>
+    </div>
+  </section>
+
+
+  <!-- ================================================================== -->
+  <!-- Navigation                                                         -->
+  <!-- ================================================================== -->
+  <section class="section nav-section" id="navigation">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <div>
+        <p class="eyebrow">Four sections</p>
+        <h2>五个栏位，<br>随手切换。</h2>
+        <p class="section-lead">底部菜单栏使用液态玻璃胶囊：消息、联系人、公告、工具箱、我。进入聊天后自动退场，返回列表时再自然出现。桌面端则收成左侧玻璃导航栏，保持同一套五个栏位。</p>
+      </div>
+    </div>
+
+    <div class="nav-grid">
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-list-light.png" alt="iPhone 消息栏">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>消息</b><span>会话列表 · 未读 · 置顶</span></figcaption>
+      </figure>
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-contacts.png" alt="iPhone 联系人栏">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>联系人</b><span>搜索 · 在线状态 · 发起会话</span></figcaption>
+      </figure>
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-notices.png" alt="iPhone 公告栏">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>公告</b><span>未读 · 置顶 · 阅读状态</span></figcaption>
+      </figure>
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-toolbox.png" alt="iPhone 工具箱栏">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>工具箱</b><span>GitHub · MYRQVIA · 反馈</span></figcaption>
+      </figure>
+      <figure class="phone-card">
+        <div class="phone">
+          <div class="phone-screen">
+            <img src="screens/mobile-me.png" alt="iPhone 我栏">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true"><span class="status-time">9:41</span><svg class="status-icons"><use href="#status-icons"></use></svg></div>
+            <div class="home-bar" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption><b>我</b><span>账户 · 偏好 · 关于</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="nav-foot">
+      <p><b>桌面端</b> · 左侧玻璃导航栏与移动端共用五个栏位；在 821px 以下自动切换为底部胶囊。</p>
+      <p><b>交互</b> · 进入聊天时 tab bar 退场，返回列表后恢复；切换栏位时页面轻微上浮淡入。</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Recall motion                                                      -->
+  <!-- ================================================================== -->
+  <section class="section recall-section" id="motion">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <div>
+        <p class="eyebrow">Signature motion</p>
+        <h2>撤回不是消失，<br>是一次有秩序的退场。</h2>
+        <p class="section-lead">粒子从气泡右上角出现，沿对角线分三批向左下扩散；消息主体在前 150ms 内保持完整，然后逐层解体。总时长 1.74s，任何时刻都不阻塞滚动。</p>
+      </div>
+    </div>
+
+    <div class="recall-stage">
+      <div class="recall-copy">
+        <div class="wave-list" aria-label="撤回动效三批时间">
+          <div class="wave"><span>第一批</span><i class="bar"><b style="left:11.5%;width:20%"></b></i><em>150–410ms</em></div>
+          <div class="wave"><span>第二批</span><i class="bar"><b style="left:33%;width:21%"></b></i><em>430–700ms</em></div>
+          <div class="wave"><span>第三批</span><i class="bar"><b style="left:55%;width:20%"></b></i><em>720–970ms</em></div>
+        </div>
+        <p class="recall-note">每颗粒子为 3–4px 的材质碎片，释放后向左下漂移、旋转 ≤7°、缩至 0.4 并淡出。三波在时间上轻微重叠，形成连续的层次，而不是一次爆散。</p>
+        <div class="recall-actions">
+          <a class="btn btn-primary" href="recall-lab.html">打开动效实验台 <svg class="ico" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          <a class="text-link" href="design-system.html#motion">阅读动效规范 <svg class="ico" aria-hidden="true"><use href="#i-chevron"></use></svg></a>
+        </div>
+      </div>
+
+      <div class="recall-frames">
+        <figure><img src="screens/recall-app-200.png" alt="撤回动效 200ms"><figcaption>200 ms</figcaption></figure>
+        <figure><img src="screens/recall-app-400.png" alt="撤回动效 400ms"><figcaption>400 ms</figcaption></figure>
+        <figure><img src="screens/recall-app-600.png" alt="撤回动效 600ms"><figcaption>600 ms</figcaption></figure>
+        <figure><img src="screens/recall-app-800.png" alt="撤回动效 800ms"><figcaption>800 ms</figcaption></figure>
+        <figure><img src="screens/recall-app-1000.png" alt="撤回动效 1000ms"><figcaption>1000 ms</figcaption></figure>
+        <figure><img src="screens/recall-app-1300.png" alt="撤回动效 1300ms"><figcaption>1300 ms</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="recall-foot">
+      <p><b>减少动态效果</b> · 系统级 <code>prefers-reduced-motion</code> 或应用内开关开启时，替换为 200ms 安静淡出，不产生粒子。</p>
+      <p><b>性能</b> · DPR 上限 2，Canvas 按需创建，动画结束后释放；不改变滚动容器高度，不影响其他消息。</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- System                                                             -->
+  <!-- ================================================================== -->
+  <section class="section system-section" id="system">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <div>
+        <p class="eyebrow">One design system</p>
+        <h2>一套规范，<br>撑住所有页面。</h2>
+        <p class="section-lead">颜色、字号、间距、圆角、动效时长全部来自同一份 token。浅色与深色不是两套设计，而是同一套关系的两种光线。</p>
+      </div>
+    </div>
+
+    <div class="system-grid">
+      <div class="swatches">
+        <div class="swatch"><i style="background:#FFFFFF"></i><b>#FFFFFF</b><span>Chat · Light</span></div>
+        <div class="swatch"><i style="background:#F5F5F7"></i><b>#F5F5F7</b><span>Sidebar · Light</span></div>
+        <div class="swatch"><i style="background:#EAEAEE"></i><b>#EAEAEE</b><span>Bubble · In</span></div>
+        <div class="swatch"><i style="background:#0A7CFF"></i><b>#0A7CFF</b><span>MYRQVIA Blue</span></div>
+        <div class="swatch"><i style="background:#111113"></i><b>#111113</b><span>Text · Primary</span></div>
+        <div class="swatch"><i style="background:#FF3B30"></i><b>#FF3B30</b><span>Destructive</span></div>
+      </div>
+
+      <div class="type-card">
+        <p class="type-eyebrow">Typography</p>
+        <div class="type-sample"><span>Aa</span><span>消息</span></div>
+        <p class="type-stack">SF Pro / Segoe UI Variable / Noto Sans SC</p>
+        <p class="type-body">消息不是数据的容器，是两个人之间最轻的接触面。MYRQVIA 让它保持干净、直接、没有多余的动作。</p>
+        <p class="type-note">16 / 23 的聊天正文，13 / 18 的列表次级信息，10.5 的时间与状态。字重只使用 400 / 500 / 600 / 700 四档。</p>
+      </div>
+    </div>
+
+    <div class="system-link">
+      <div><b>完整规范</b><p>品牌、色彩、字体、间距、组件状态与动效参数。</p></div>
+      <a class="btn btn-ghost" href="design-system.html">打开视觉规范 <svg class="ico" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Delivery checklist                                                 -->
+  <!-- ================================================================== -->
+  <section class="section delivery-section" id="delivery">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <div>
+        <p class="eyebrow">Delivery index</p>
+        <h2>十项交付，<br>逐项可查。</h2>
+        <p class="section-lead">所有页面共用同一套 token 与组件；截图均由真实原型渲染，不是后期拼贴。</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="delivery">
+        <thead><tr><th>#</th><th>交付项</th><th>说明</th><th>查看</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>iPhone 聊天首页</td><td>全屏聊天、原生导航、安全区输入</td><td><a href="screens/mobile-chat-light.png">Light</a> · <a href="screens/mobile-chat-dark.png">Dark</a></td></tr>
+          <tr><td>02</td><td>iPhone 会话列表</td><td>公告入口、置顶、未读、静音</td><td><a href="screens/mobile-list-light.png">Light</a> · <a href="screens/mobile-list-dark.png">Dark</a></td></tr>
+          <tr><td>03</td><td>桌面端聊天界面</td><td>318 会话栏 + 752 阅读列</td><td><a href="screens/desktop-chat-light.png">Light</a> · <a href="screens/desktop-chat-dark.png">Dark</a></td></tr>
+          <tr><td>04</td><td>消息长按菜单</td><td>回应、回复、复制、转发、撤回、删除</td><td><a href="screens/mobile-context-light.png">iPhone</a> · <a href="screens/desktop-context-light.png">Desktop</a></td></tr>
+          <tr><td>05</td><td>设置界面</td><td>主题、字体、动效与消息偏好</td><td><a href="screens/mobile-settings-light.png">iPhone</a> · <a href="screens/desktop-settings-light.png">Desktop</a></td></tr>
+          <tr><td>06</td><td>公告展示</td><td>排版优先、更多公告、已读状态</td><td><a href="screens/mobile-notice-light.png">iPhone</a> · <a href="screens/desktop-notice-light.png">Desktop</a></td></tr>
+          <tr><td>07</td><td>Light Mode</td><td>干净的浅色系统背景与单一蓝</td><td><a href="design-system.html#color">色彩规范</a></td></tr>
+          <tr><td>08</td><td>Dark Mode</td><td>纯黑底、低对比层级、同一套结构</td><td><a href="screens/desktop-chat-dark.png">桌面 Dark</a> · <a href="screens/mobile-list-dark.png">iPhone Dark</a></td></tr>
+          <tr><td>09</td><td>关键页面切换</td><td>iPhone 推入 / 返回；桌面 sheet 弹性出现</td><td><a href="design-system.html#motion">动效规范</a></td></tr>
+          <tr><td>10</td><td>撤回粒子动画</td><td>三批粒子、对角消散、减少动态降级</td><td><a href="recall-lab.html">动效实验台</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg class="brand-mark" aria-hidden="true"><use href="#i-spark"></use></svg>
+      <span>MYRQVIA</span>
+    </div>
+    <p>Chat 2.0 · 设计交付 · 2026.11</p>
+    <div class="footer-links">
+      <a href="index.html">交互原型</a>
+      <a href="design-system.html">视觉规范</a>
+      <a href="recall-lab.html">动效实验台</a>
+      <a href="README.md">设计说明</a>
+    </div>
+    <p class="footer-note">本地设计原型，不连接服务器。所有交互仅发生在当前浏览器。</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    var img = document.getElementById('secondary-img');
+    var title = document.getElementById('secondary-title');
+    var cap = document.getElementById('secondary-cap');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (other) {
+          other.classList.toggle('is-active', other === tab);
+          other.setAttribute('aria-selected', other === tab ? 'true' : 'false');
+        });
+        if (img) img.src = tab.dataset.img;
+        if (title) title.textContent = tab.dataset.title;
+        if (cap) cap.textContent = tab.dataset.cap;
+      });
+    });
+  })();
+</script>
+</body>
+</html>
+
