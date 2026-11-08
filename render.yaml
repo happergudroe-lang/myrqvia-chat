@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: myrqvia-chat
+    runtime: node
+    plan: starter
+    buildCommand: ""
+    startCommand: node server/server.mjs
+    healthCheckPath: /api/health
+    disk:
+      name: myrqvia-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_FILE
+        value: /data/myrqvia-auth.json
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: EMAIL_PROVIDER
+        value: gmail
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: EMAIL_FROM
+        value: MYRQVIA
