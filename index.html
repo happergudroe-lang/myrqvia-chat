@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-chat-size="standard" data-ready="false">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light dark">
+  <title>MYRQVIA Chat</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon-256.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MYRQVIA">
+  <script>
+    (function () {
+      try {
+        var p = new URLSearchParams(location.search);
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem('myrqvia.messenger.settings.v2') || '{}'); } catch (e) {}
+        var choice = p.get('theme') || saved.theme || 'system';
+        var dark = choice === 'dark' || (choice === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var root = document.documentElement;
+        root.dataset.theme = dark ? 'dark' : 'light';
+        root.style.colorScheme = dark ? 'dark' : 'light';
+        if (p.get('shot') === '1') root.dataset.shot = 'true';
+        if (p.get('motion') === 'reduce') root.dataset.reduceMotion = 'true';
+        if (p.get('safe') === '1') {
+          root.style.setProperty('--safe-top', '54px');
+          root.style.setProperty('--safe-bottom', '34px');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/imessage.css">
+<link rel="stylesheet" href="css/typography.css">
+</head>
+<body>
+
+<!-- Icon sprite ----------------------------------------------------------- -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1.6c.48 5.2 3.6 8.32 8.8 8.8-5.2.48-8.32 3.6-8.8 8.8-.48-5.2-3.6-8.32-8.8-8.8 5.2-.48 8.32-3.6 8.8-8.8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M4.5 10.2v3.6a1.2 1.2 0 0 0 1.2 1.2h2.1l4.2 3V6l-4.2 3H5.7a1.2 1.2 0 0 0-1.2 1.2Z"/><path d="M15.1 8.6a4.6 4.6 0 0 1 0 6.8M17.9 5.9a8.4 8.4 0 0 1 0 12.2"/></symbol>
+  <symbol id="i-compose" viewBox="0 0 24 24"><path d="M12.4 5.2H6.6A2.6 2.6 0 0 0 4 7.8v9.6A2.6 2.6 0 0 0 6.6 20h9.6a2.6 2.6 0 0 0 2.6-2.6v-5.8"/><path d="M16.9 3.6a2.2 2.2 0 0 1 3.1 3.1l-8.6 8.6-4.1 1 1-4.1 8.6-8.6Z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.2 4.2"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7.5h8M17.5 7.5H20M4 16.5h2.5M11 16.5h9"/><circle cx="14.8" cy="7.5" r="2.4"/><circle cx="8.2" cy="16.5" r="2.4"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.7 5.3 8 12l6.7 6.7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.3 5.3 6.7 6.7-6.7 6.7"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6.3 9.3 5.7 5.7 5.7-5.7"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 10.9v5.4"/><circle cx="12" cy="7.9" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.2v13.6M5.2 12h13.6"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19.2V5.2M6.4 10.8 12 5.2l5.6 5.6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.7v4.7l3 1.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.6v5.1"/><circle cx="12" cy="16.3" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.5 4.5 4.5L19.4 6.8"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9.3 4.2h5.4l-.9 5.6 3.6 3.9H6.6l3.6-3.9-.9-5.6Z"/><path d="M12 13.7v6"/></symbol>
+  <symbol id="i-muted" viewBox="0 0 24 24"><path d="M18 8.6a6 6 0 0 0-9.4-4.9M6 8.6c0 6.4-2.4 6.5-2.4 8.1h12.2"/><path d="M10.2 20.4h3.6M3.8 3.8l16.4 16.4"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M4.6 9.8a7.6 7.6 0 1 1 1.5 6"/><path d="M4.6 4.8v5h5"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 24 24"><path d="M9.2 6.4 3.6 12l5.6 5.6"/><path d="M3.6 12h9.7a7 7 0 0 1 7 7v.6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.2" y="8.2" width="11.6" height="11.6" rx="2.4"/><path d="M15.8 8.2V6.4a2.4 2.4 0 0 0-2.4-2.4H6.4A2.4 2.4 0 0 0 4 6.4v7a2.4 2.4 0 0 0 2.4 2.4h1.8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 9.7l5.4-.8L12 4Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.8 6.8h14.4M9.4 6.8V4.9c0-.6.5-1.1 1.1-1.1h3c.6 0 1.1.5 1.1 1.1v1.9M6.7 6.8l.8 11.7c0 .9.8 1.6 1.7 1.6h5.6c.9 0 1.7-.7 1.7-1.6l.8-11.7"/><path d="M10.2 10.4v5.8M13.8 10.4v5.8"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M13.6 3.8H7.4A2.4 2.4 0 0 0 5 6.2v11.6a2.4 2.4 0 0 0 2.4 2.4h9.2a2.4 2.4 0 0 0 2.4-2.4V9.2l-5.4-5.4Z"/><path d="M13.4 3.9v5.3H19"/></symbol>
+  <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3.8" y="5" width="16.4" height="14" rx="2.6"/><circle cx="9" cy="10" r="1.5"/><path d="m5.2 17.5 4.7-4.4 3.6 3.2 2.5-2.2 2.8 2.6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4.8 12h14.4M13.8 6.6 19.2 12l-5.4 5.4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v10.4M7.4 10.2 12 14.8l4.6-4.6M5 19.4h14"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11.6a7.7 7.7 0 0 1-7.7 7.7H8.3L4 22.3v-4.4A7.7 7.7 0 1 1 20 11.6Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9.1" cy="8.1" r="3.1"/><path d="M3.6 19.8c.4-3.8 2.7-5.8 5.5-5.8s5.1 2 5.5 5.8"/><path d="M15.7 5.4a3 3 0 0 1 0 5.5M17.2 14.5c2 .5 3.1 2.2 3.4 4.6"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.5-4 3.1-6 6.5-6s6 2 6.5 6"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.4"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.4"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.4"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.4"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.9 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.2" width="17" height="13.6" rx="2.4"/><path d="m4.2 6.4 7.8 6.5 7.8-6.5"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.6" y="4.4" width="16.8" height="4.4" rx="1.3"/><path d="M5.2 8.8v8.8c0 1 .8 1.8 1.8 1.8h10c1 0 1.8-.8 1.8-1.8V8.8M10 12.2h4"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.4 4.4h11.2c.6 0 1 .4 1 1v15l-6.6-4.4-6.6 4.4v-15c0-.6.4-1 1-1Z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4.2 8.4h3l1.3-2.1h7l1.3 2.1h3A1.8 1.8 0 0 1 21.6 10v8.2a1.8 1.8 0 0 1-1.8 1.8H4.2a1.8 1.8 0 0 1-1.8-1.8V10a1.8 1.8 0 0 1 1.8-1.6Z"/><circle cx="12" cy="14" r="3.4"/></symbol>
+  <symbol id="i-switch" viewBox="0 0 24 24"><path d="M5 8.5h11.5L13.8 5.8M19 15.5H7.5l2.7 2.7"/></symbol>
+  <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M8.6 14.2c.8 1.4 2 2.1 3.4 2.1s2.6-.7 3.4-2.1"/><circle cx="9.2" cy="9.8" r=".7" fill="currentColor" stroke="none"/><circle cx="14.8" cy="9.8" r=".7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5.8l9-1.8V16"/><circle cx="6.6" cy="18" r="2.4"/><circle cx="15.6" cy="16" r="2.4"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.6" y="4.8" width="16.8" height="14.4" rx="2.2"/><circle cx="8.7" cy="9.6" r="1.3"/><path d="m5.2 17 4.7-4.5 3.8 3.4 2.4-2.2 3 2.8"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><path d="M4.2 10h15.6v9.4H4.2V10ZM3.4 6.8h17.2V10H3.4V6.8Z"/><path d="M12 6.8v12.6M12 6.8c-1.2-3.2-4.5-3.4-4.5-1.2 0 1.3 1.8 1.2 4.5 1.2ZM12 6.8c1.2-3.2 4.5-3.4 4.5-1.2 0 1.3-1.8 1.2-4.5 1.2Z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12.6" rx="2.2"/><path d="M3.8 9h13.8a2.6 2.6 0 0 1 0 5.2H14.8"/><circle cx="15" cy="11.6" r=".7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 20.4s6.4-5.5 6.4-10.2a6.4 6.4 0 1 0-12.8 0C5.6 14.9 12 20.4 12 20.4Z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5 19 12 8 18.5v-13Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="7" y="5" width="3.4" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="13.6" y="5" width="3.4" height="14" rx="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 5.5 15 12 6 18.5v-13ZM17.5 5v14"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="m18 5.5-9 6.5 9 6.5v-13ZM6.5 5v14"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9.4a6 6 0 1 0-12 0c0 6.4-2.4 6.5-2.4 8.1h16.8c0-1.6-2.4-1.7-2.4-8.1Z"/><path d="M10.2 20.4h3.6"/></symbol>
+</svg>
+
+<div class="app" id="app" data-route="list" data-section="messages" aria-label="MYRQVIA Chat">
+
+  <!-- ================= Desktop navigation rail ========================== -->
+  <nav class="rail" id="rail" aria-label="主导航">
+    <span class="rail-brand" aria-hidden="true"><svg class="brand-mark"><use href="#i-spark"/></svg></span>
+    <button class="rail-item is-active" type="button" data-tab="messages" aria-current="page">
+      <span class="rail-icon"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></span>
+      <span class="rail-label">消息</span>
+    </button>
+    <button class="rail-item" type="button" data-tab="contacts">
+      <span class="rail-icon"><svg class="ico" aria-hidden="true"><use href="#i-users"/></svg></span>
+      <span class="rail-label">联系人</span>
+    </button>
+    <button class="rail-item" type="button" data-tab="notices">
+      <span class="rail-icon"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="rail-dot" id="rail-notice-dot" hidden></span></span>
+      <span class="rail-label">公告</span>
+    </button>
+    <button class="rail-item" type="button" data-tab="toolbox">
+      <span class="rail-icon"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg></span>
+      <span class="rail-label">工具箱</span>
+    </button>
+    <button class="rail-item" type="button" data-tab="me">
+      <span class="rail-icon"><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg></span>
+      <span class="rail-label">我</span>
+    </button>
+  </nav>
+
+  <!-- ================= Sidebar / conversation list ====================== -->
+  <aside class="sidebar" id="sidebar">
+    <header class="sidebar-head">
+      <button class="brand" id="brand-btn" type="button" data-action="home" aria-label="MYRQVIA Chat">
+        <svg class="brand-mark" aria-hidden="true"><use href="#i-spark"/></svg>
+        <span class="brand-word">MYRQVIA</span>
+        <span class="brand-version">2.0</span>
+      </button>
+      <h1 class="mobile-title">消息</h1>
+      <div class="sidebar-actions">
+        <button class="icon-btn" type="button" data-action="announcements" aria-label="公告">
+          <svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg>
+          <span class="badge-dot" id="notice-dot" hidden></span>
+        </button>
+        <button class="icon-btn" type="button" data-action="new-chat" aria-label="新消息">
+          <svg class="ico" aria-hidden="true"><use href="#i-compose"/></svg>
+        </button>
+        <button class="icon-btn mobile-me" type="button" data-action="settings" aria-label="设置">
+          <span class="avatar avatar-30 tone-slate" data-me-avatar>屿</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="sidebar-search">
+      <label class="search-field" for="search-input">
+        <svg class="ico search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="search-input" type="text" placeholder="搜索" autocomplete="off" spellcheck="false" enterkeyhint="search">
+        <span class="search-hint" aria-hidden="true">⌘K</span>
+      </label>
+    </div>
+
+    <button class="archive-row" id="archive-row" type="button" data-action="archive" hidden>
+      <span class="archive-glyph"><svg class="ico" aria-hidden="true"><use href="#i-archive"/></svg></span>
+      <span class="archive-copy"><b>已归档</b><span id="archive-count">0 个会话</span></span>
+      <svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+    </button>
+
+    <button class="mobile-notice" type="button" data-action="announcements">
+      <span class="notice-glyph"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg></span>
+      <span class="m-notice-copy">
+        <span class="m-notice-kicker">MYRQVIA 团队 · 今天</span>
+        <span class="m-notice-title">MYRQVIA 2.0 设计内测</span>
+      </span>
+      <span class="unread-dot" id="mobile-notice-dot"></span>
+      <svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+    </button>
+
+    <div class="chat-list scroll-area" id="chat-list" role="list"></div>
+
+    <footer class="sidebar-foot">
+      <button class="me-btn" type="button" data-action="settings" aria-label="打开设置">
+        <span class="avatar avatar-28 tone-slate" data-me-avatar>屿</span>
+        <span class="me-meta">
+          <span class="me-name" data-me-name>陈屿</span>
+          <span class="me-status"><i class="online-dot"></i>在线</span>
+        </span>
+      </button>
+      <button class="icon-btn" type="button" data-action="settings" aria-label="设置">
+        <svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>
+      </button>
+    </footer>
+  </aside>
+
+  <!-- ================= Chat ============================================ -->
+  <main class="main" id="main">
+    <section class="chat" id="chat" aria-label="聊天">
+      <header class="chat-head">
+        <button class="chat-back" type="button" data-action="back" aria-label="返回会话列表">
+          <svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>
+        </button>
+        <button class="chat-peer" type="button" data-action="info" aria-label="查看聊天信息">
+          <span class="chat-peer-text">
+            <span class="chat-peer-name" id="peer-name">MYRQVIA 设计组</span>
+            <span class="chat-peer-sub" id="peer-sub"><i class="online-dot"></i>3 人在线</span>
+          </span>
+        </button>
+        <div class="chat-head-actions">
+          <button class="icon-btn" type="button" data-action="info" aria-label="详细信息">
+            <svg class="ico" aria-hidden="true"><use href="#i-info"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="network-bar" id="network-bar" hidden><i></i>未连接网络 · 消息将保留在本地</div>
+
+      <div class="chat-scroll scroll-area" id="chat-scroll">
+        <div class="chat-inner" id="chat-inner" data-recall-host>
+          <div class="chat-day" id="chat-day">今天 14:02</div>
+          <div class="messages" id="messages"></div>
+        </div>
+        <button class="jump-bottom" type="button" id="jump-bottom" aria-label="回到最新消息" hidden>
+          <svg class="ico" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </button>
+      </div>
+
+      <div class="composer-area">
+        <div class="reply-preview" id="reply-preview" hidden>
+          <div class="reply-rail"></div>
+          <div class="reply-copy">
+            <span class="reply-label" id="reply-label">回复 林深</span>
+            <span class="reply-text" id="reply-text"></span>
+          </div>
+          <button class="reply-close" type="button" id="reply-close" aria-label="取消回复">
+            <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+          </button>
+        </div>
+        <form class="composer" id="composer" autocomplete="off">
+          <button class="plus-btn" type="button" id="plus-btn" aria-label="添加附件">
+            <svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg>
+          </button>
+          <div class="composer-field">
+            <textarea id="message-input" rows="1" placeholder="消息" maxlength="4000" enterkeyhint="send" aria-label="消息输入框"></textarea>
+            <button class="send-btn" type="submit" id="send-btn" aria-label="发送" disabled>
+              <svg class="ico" aria-hidden="true"><use href="#i-send"/></svg>
+            </button>
+          </div>
+          <button class="emoji-btn" type="button" id="emoji-btn" aria-label="表情">
+            <svg class="ico" aria-hidden="true"><use href="#i-smile"/></svg>
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Contacts page ==================================== -->
+  <section class="tab-page" id="page-contacts" data-page="contacts" hidden>
+    <header class="tab-page-head">
+      <div class="page-head-copy">
+        <p class="page-eyebrow">CONTACTS</p>
+        <h1>联系人</h1>
+        <p class="page-sub">找到人，开始一段对话。</p>
+      </div>
+      <button class="page-action" type="button" data-action="add-friend" aria-label="按 @用户名 添加好友">
+        <svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg>
+      </button>
+      <button class="page-action" type="button" data-action="new-chat" aria-label="新消息">
+        <svg class="ico" aria-hidden="true"><use href="#i-compose"/></svg>
+      </button>
+    </header>
+    <div class="tab-page-scroll scroll-area">
+      <div class="tab-page-inner">
+        <label class="search-field page-search" for="contacts-search">
+          <svg class="ico search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+          <input id="contacts-search" type="text" placeholder="搜索联系人" autocomplete="off" spellcheck="false">
+        </label>
+        <div class="page-section-head"><span>全部联系人</span><span id="contacts-count">7 位</span></div>
+        <div class="contact-page-list" id="contacts-page-list"></div>
+        <p class="page-note">联系人来自你的 MYRQVIA 账号。添加好友必须输入完整的 <b>@用户名</b>，不支持昵称搜索。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Notices page ===================================== -->
+  <section class="tab-page" id="page-notices" data-page="notices" hidden>
+    <header class="tab-page-head">
+      <div class="page-head-copy">
+        <p class="page-eyebrow">NEWSROOM</p>
+        <h1>公告</h1>
+        <p class="page-sub">来自 MYRQVIA 团队的产品与设计说明。</p>
+      </div>
+    </header>
+    <div class="tab-page-scroll scroll-area">
+      <div class="tab-page-inner">
+        <div class="notice-page-list" id="notices-page-list"></div>
+        <p class="page-note">公告为本地演示内容。打开后会在当前浏览器标记为已读。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Me page ========================================== -->
+  <section class="tab-page" id="page-me" data-page="me" hidden>
+    <header class="tab-page-head">
+      <div class="page-head-copy">
+        <p class="page-eyebrow">ACCOUNT</p>
+        <h1>我</h1>
+        <p class="page-sub">你的账户、偏好与关于 MYRQVIA。</p>
+      </div>
+    </header>
+    <div class="tab-page-scroll scroll-area">
+      <div class="tab-page-inner">
+        <div class="me-profile-card" data-profile="me" role="button" tabindex="0" aria-label="查看我的资料">
+          <span class="avatar avatar-72 tone-slate" data-me-avatar>屿</span>
+          <div class="me-profile-copy">
+            <h2 data-me-name>陈屿</h2>
+            <p>MYRQVIA ID · 1688</p>
+          </div>
+          <span class="me-online"><i class="online-dot"></i>在线</span>
+        </div>
+
+        <div class="page-group">
+          <button class="page-row" type="button" data-action="settings">
+            <span class="page-row-label"><span class="page-row-icon"><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg></span>设置</span>
+            <span class="page-row-value">外观 · 通知 · 数据<svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></span>
+          </button>
+          <div class="page-row">
+            <span class="page-row-label">外观</span>
+            <span class="page-row-value" id="me-theme-value">跟随系统</span>
+          </div>
+          <div class="page-row">
+            <span class="page-row-label">聊天字体</span>
+            <span class="page-row-value" id="me-font-value">标准</span>
+          </div>
+          <div class="page-row">
+            <span class="page-row-label">减少动态效果</span>
+            <span class="page-row-value" id="me-motion-value">关闭</span>
+          </div>
+        </div>
+
+        <div class="page-group">
+          <button class="page-row" type="button" data-action="saved">
+            <span class="page-row-label"><span class="page-row-icon"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg></span>我的收藏</span>
+            <span class="page-row-value"><span id="me-saved-count">0 条</span><svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></span>
+          </button>
+        </div>
+
+        <div class="page-group">
+          <a class="page-row" href="design-system.html" target="_blank" rel="noopener">
+            <span class="page-row-label">设计规范</span>
+            <span class="page-row-value">查看<svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></span>
+          </a>
+          <a class="page-row" href="recall-lab.html" target="_blank" rel="noopener">
+            <span class="page-row-label">动效实验台</span>
+            <span class="page-row-value">查看<svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></span>
+          </a>
+        </div>
+
+        <p class="page-note">MYRQVIA Chat 2.0 · 本地设计原型<br>不连接服务器，所有操作仅作用于当前页面。</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= Toolbox page ==================================== -->
+  <section class="tab-page" id="page-toolbox" data-page="toolbox" hidden>
+    <header class="tab-page-head">
+      <div class="page-head-copy">
+        <p class="page-eyebrow">TOOLBOX</p>
+        <h1>工具箱</h1>
+        <p class="page-sub">直达链接、MYRQVIA CORE 1.0 与问题反馈。</p>
+      </div>
+    </header>
+    <div class="tab-page-scroll scroll-area">
+      <div class="tab-page-inner">
+        <div class="page-group">
+          <a class="page-row toolbox-row" id="toolbox-github" href="https://github.com/" target="_blank" rel="noopener">
+            <span class="page-row-label"><span class="page-row-icon toolbox-icon"><svg class="ico" aria-hidden="true"><use href="#i-github"/></svg></span>GitHub</span>
+            <span class="page-row-value" data-toolbox-label="github">github.com<svg class="ico row-chevron" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+          </a>
+          <a class="page-row toolbox-row" id="toolbox-myrqvia" href="https://myrqvia.ai/" target="_blank" rel="noopener">
+            <span class="page-row-label"><span class="page-row-icon toolbox-icon"><svg class="ico" aria-hidden="true"><use href="#i-spark"/></svg></span>MYRQVIA CORE 1.0</span>
+            <span class="page-row-value" data-toolbox-label="myrqvia">myrqvia.ai<svg class="ico row-chevron" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+          </a>
+        </div>
+        <div class="page-group">
+          <a class="page-row toolbox-row" id="toolbox-mail" href="mailto:happergudroe@gmail.com">
+            <span class="page-row-label"><span class="page-row-icon toolbox-icon"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></span>联系与问题反馈</span>
+            <span class="page-row-value">happergudroe@gmail.com<svg class="ico row-chevron" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+          </a>
+        </div>
+        <p class="page-note">GitHub 与 MYRQVIA 链接可在 js/config.js 中替换为实际地址。<br>问题反馈与联系邮箱：happergudroe@gmail.com</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Mobile tab bar =================================== -->
+  <nav class="tabbar" id="tabbar" aria-label="底部导航">
+    <button class="tabbar-item is-active" type="button" data-tab="messages" aria-current="page">
+      <span class="tabbar-icon"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></span>
+      <span class="tabbar-label">消息</span>
+    </button>
+    <button class="tabbar-item" type="button" data-tab="contacts">
+      <span class="tabbar-icon"><svg class="ico" aria-hidden="true"><use href="#i-users"/></svg></span>
+      <span class="tabbar-label">联系人</span>
+    </button>
+    <button class="tabbar-item" type="button" data-tab="notices">
+      <span class="tabbar-icon"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="tabbar-dot" id="tab-notice-dot" hidden></span></span>
+      <span class="tabbar-label">公告</span>
+    </button>
+    <button class="tabbar-item" type="button" data-tab="toolbox">
+      <span class="tabbar-icon"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg></span>
+      <span class="tabbar-label">工具箱</span>
+    </button>
+    <button class="tabbar-item" type="button" data-tab="me">
+      <span class="tabbar-icon"><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg></span>
+      <span class="tabbar-label">我</span>
+    </button>
+  </nav>
+</div>
+
+
+
+<!-- ================= Profile =========================================== -->
+<div class="overlay" id="profile-layer" hidden>
+  <div class="overlay-scrim" data-close="profile"></div>
+  <section class="sheet sheet-profile" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+    <header class="sheet-head">
+      <h2 class="sheet-title" id="profile-title">个人资料</h2>
+      <button class="sheet-close" type="button" data-close="profile" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area">
+      <div class="profile-body">
+        <div class="profile-hero">
+          <span class="avatar avatar-88 tone-slate" id="profile-avatar">屿</span>
+          <h2 id="profile-name">陈屿</h2>
+          <p class="profile-handle" id="profile-handle">@myrqvia_1688</p>
+          <p class="profile-seen" id="profile-seen">在线</p>
+        </div>
+        <button class="profile-message" id="profile-message" type="button">发消息</button>
+        <div class="profile-group">
+          <div class="profile-field"><span>用户名</span><b id="profile-username">@myrqvia_1688</b></div>
+          <div class="profile-field"><span>MYRQVIA ID</span><b id="profile-id">1688</b></div>
+          <div class="profile-field"><span>备注</span><b id="profile-note">—</b></div>
+        </div>
+        <p class="profile-foot">资料为本地设计演示内容。真实账号资料由 MYRQVIA 服务端提供。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= Archive ============================================ -->
+<div class="overlay" id="archive-layer" hidden>
+  <div class="overlay-scrim" data-close="archive"></div>
+  <section class="sheet sheet-archive" role="dialog" aria-modal="true" aria-labelledby="archive-title">
+    <header class="sheet-head">
+      <h2 class="sheet-title" id="archive-title">已归档</h2>
+      <button class="sheet-close" type="button" data-close="archive" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area">
+      <div class="archive-list" id="archive-list"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= Saved / Favorites ================================= -->
+<div class="overlay" id="saved-layer" hidden>
+  <div class="overlay-scrim" data-close="saved"></div>
+  <section class="sheet sheet-saved" role="dialog" aria-modal="true" aria-labelledby="saved-title">
+    <header class="sheet-head">
+      <h2 class="sheet-title" id="saved-title">我的收藏</h2>
+      <button class="sheet-close" type="button" data-close="saved" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area">
+      <div class="saved-list" id="saved-list"></div>
+    </div>
+  </section>
+
+</div>
+
+
+  <div class="sticker-panel" id="sticker-panel" hidden>
+    <div class="sticker-head">
+      <div class="sticker-tabs">
+        <button type="button" class="is-active" data-sticker-tab="emoji">表情</button>
+        <button type="button" data-sticker-tab="sticker">贴纸</button>
+        <button type="button" data-sticker-tab="gif">GIF</button>
+      </div>
+      <button class="sticker-close" type="button" id="sticker-close" aria-label="关闭表情">×</button>
+    </div>
+    <div class="sticker-grid" id="sticker-grid"></div>
+  </div>
+
+<!-- ================= Search ============================================ -->
+<div class="overlay" id="search-layer" hidden>
+  <div class="search-screen">
+    <div class="search-top">
+      <label class="search-all-field">
+        <svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="search-all" type="search" placeholder="搜索消息、联系人、文件" autocomplete="off" spellcheck="false">
+        <button type="button" class="search-clear" id="search-clear" aria-label="清空">×</button>
+      </label>
+      <button class="search-close" type="button" data-close="search" aria-label="关闭搜索">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <div class="search-tabs" id="search-tabs">
+      <button type="button" class="is-active" data-search-tab="chat">聊天</button>
+      <button type="button" data-search-tab="contacts">联系人</button>
+      <button type="button" data-search-tab="media">媒体</button>
+      <button type="button" data-search-tab="files">文件</button>
+    </div>
+    <div class="search-body scroll-area" id="search-body"></div>
+  </div>
+</div>
+
+<!-- ================= Attachments ====================================== -->
+<div class="overlay" id="media-layer" hidden>
+  <div class="overlay-scrim" data-close="media"></div>
+  <section class="media-sheet" role="dialog" aria-modal="true" aria-labelledby="media-title">
+    <div class="sheet-grab" aria-hidden="true"></div>
+    <header class="media-head">
+      <h2 id="media-title">附件</h2>
+      <button class="media-close" type="button" data-close="media" aria-label="关闭">×</button>
+    </header>
+    <div class="media-content scroll-area" id="media-content"></div>
+    <nav class="media-tabs" id="media-tabs" aria-label="附件类型">
+      <button class="is-active" type="button" data-media-tab="gallery"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg><span>相册</span></button>
+      <button type="button" data-media-tab="gift"><svg class="ico" aria-hidden="true"><use href="#i-gift"/></svg><span>礼物</span></button>
+      <button type="button" data-media-tab="file"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg><span>文件</span></button>
+      <button type="button" data-media-tab="wallet"><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg><span>钱包</span></button>
+      <button type="button" data-media-tab="location"><svg class="ico" aria-hidden="true"><use href="#i-map"/></svg><span>位置</span></button>
+      <button type="button" data-media-tab="music"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg><span>音乐</span></button>
+    </nav>
+  </section>
+</div>
+
+<!-- ================= Music ============================================ -->
+<div class="overlay" id="music-layer" hidden>
+  <div class="overlay-scrim" data-close="music"></div>
+  <section class="music-sheet" role="dialog" aria-modal="true" aria-labelledby="music-title">
+    <header class="music-head">
+      <span>MYRQVIA SOUND</span>
+      <button class="media-close" type="button" data-close="music" aria-label="关闭">×</button>
+    </header>
+    <div class="music-cover"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#i-music"/></svg></div>
+    <h2 id="music-title">Drift</h2>
+    <p class="music-artist" id="music-artist">MYRQVIA Sound</p>
+    <input class="music-seek" id="music-seek" type="range" min="0" max="1000" value="0" aria-label="播放进度">
+    <div class="music-time"><span id="music-current">0:00</span><span id="music-duration">0:00</span></div>
+    <div class="music-controls">
+      <button type="button" id="music-prev" aria-label="上一首"><svg class="ico" aria-hidden="true"><use href="#i-prev"/></svg></button>
+      <button type="button" class="music-play" id="music-play" aria-label="播放"><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg></button>
+      <button type="button" id="music-next" aria-label="下一首"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="music-list" id="music-list"></div>
+  </section>
+</div>
+
+
+<!-- ================= Camera ============================================ -->
+<div class="overlay" id="camera-layer" hidden>
+  <section class="camera-screen" role="dialog" aria-modal="true" aria-label="拍照">
+    <header class="camera-head">
+      <button class="camera-close" type="button" data-close="camera" aria-label="关闭">×</button>
+      <span>拍照</span>
+      <button class="camera-switch" type="button" id="camera-switch" aria-label="切换摄像头">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-switch"/></svg>
+      </button>
+    </header>
+    <div class="camera-stage">
+      <video id="camera-video" muted playsinline autoplay></video>
+      <canvas id="camera-canvas" hidden></canvas>
+      <p class="camera-status" id="camera-status">正在打开摄像头…</p>
+    </div>
+    <div class="camera-controls">
+      <button class="camera-fallback" type="button" id="camera-fallback">使用系统相机</button>
+      <button class="camera-shutter" type="button" id="camera-shutter" aria-label="拍照" disabled></button>
+      <span class="camera-spacer"></span>
+    </div>
+  </section>
+</div>
+<!-- ================= Settings ============================================ -->
+<div class="overlay" id="settings-layer" hidden>
+  <div class="overlay-scrim" data-close="settings"></div>
+  <section class="sheet sheet-settings" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <header class="sheet-head">
+      <button class="sheet-back" type="button" data-close="settings" aria-label="返回">
+        <svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>
+      </button>
+      <h2 class="sheet-title" id="settings-title">设置</h2>
+      <button class="sheet-close" type="button" data-close="settings" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area">
+      <div class="settings-profile">
+        <span class="avatar avatar-56 tone-slate" data-me-avatar>屿</span>
+        <div class="settings-profile-meta">
+          <span class="settings-profile-name" data-me-name>陈屿</span>
+          <span class="settings-profile-id">MYRQVIA ID · 1688</span>
+        </div>
+        <span class="settings-profile-state"><i class="online-dot"></i>在线</span>
+      </div>
+
+      <p class="group-label">外观</p>
+      <div class="group">
+        <div class="row row-stacked">
+          <span class="row-title">主题</span>
+          <div class="segmented" data-segment="theme" role="radiogroup" aria-label="主题">
+            <button type="button" role="radio" data-theme-choice="system">跟随系统</button>
+            <button type="button" role="radio" data-theme-choice="light">浅色</button>
+            <button type="button" role="radio" data-theme-choice="dark">深色</button>
+          </div>
+        </div>
+        <div class="row row-stacked">
+          <div class="row-inline">
+            <span class="row-title">聊天字体大小</span>
+            <span class="row-value" id="chat-size-label">标准</span>
+          </div>
+          <div class="range-row">
+            <span class="range-a">A</span>
+            <input class="range" id="chat-size-range" type="range" min="0" max="3" step="1" value="1" aria-label="聊天字体大小">
+            <span class="range-a range-a-lg">A</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="row-title">减少动态效果</span>
+          <button class="switch" type="button" role="switch" aria-checked="false" data-toggle="reduce-motion"><span></span></button>
+        </div>
+      </div>
+
+      <p class="group-label">消息</p>
+      <div class="group">
+        <div class="row">
+          <span class="row-title">显示已读回执</span>
+          <button class="switch" type="button" role="switch" aria-checked="true" data-toggle="receipts"><span></span></button>
+        </div>
+        <div class="row">
+          <span class="row-title">消息提示音</span>
+          <button class="switch" type="button" role="switch" aria-checked="true" data-toggle="sounds"><span></span></button>
+        </div>
+        <div class="row">
+          <span class="row-title">公告未读提醒</span>
+          <button class="switch" type="button" role="switch" aria-checked="true" data-toggle="notice-badge"><span></span></button>
+        </div>
+      </div>
+
+      <p class="group-label">数据</p>
+      <div class="group">
+        <button class="row row-tap" type="button" data-action="reset-demo">
+          <span class="row-title row-title-danger">清除本地演示数据</span>
+          <svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </button>
+      </div>
+
+      <p class="group-label">关于</p>
+      <div class="group">
+        <a class="row row-tap" href="design-system.html" target="_blank" rel="noopener">
+          <span class="row-title">设计规范</span>
+          <span class="row-value row-value-accent">查看<svg class="ico row-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></span>
+        </a>
+      </div>
+
+      <p class="settings-note">MYRQVIA Chat 2.0 · 本地交互原型，不连接服务器。操作仅作用于当前页面，偏好保存在当前浏览器。</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= Announcements ====================================== -->
+<div class="overlay" id="notice-layer" hidden>
+  <div class="overlay-scrim" data-close="notice"></div>
+  <section class="sheet sheet-notice" role="dialog" aria-modal="true" aria-labelledby="notice-title">
+    <header class="sheet-head">
+      <button class="sheet-back" type="button" data-close="notice" aria-label="返回">
+        <svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>
+      </button>
+      <h2 class="sheet-title" id="notice-title">公告</h2>
+      <button class="sheet-close" type="button" data-close="notice" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area" id="notice-body"></div>
+  </section>
+</div>
+
+<!-- ================= Conversation info ================================== -->
+<div class="overlay" id="info-layer" hidden>
+  <div class="overlay-scrim" data-close="info"></div>
+  <section class="sheet sheet-info" role="dialog" aria-modal="true" aria-labelledby="info-title">
+    <header class="sheet-head">
+      <button class="sheet-back" type="button" data-close="info" aria-label="返回">
+        <svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>
+      </button>
+      <h2 class="sheet-title" id="info-title">详细信息</h2>
+      <button class="sheet-close" type="button" data-close="info" aria-label="关闭">
+        <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </header>
+    <div class="sheet-body scroll-area" id="info-body"></div>
+  </section>
+</div>
+
+<!-- ================= Add friend by @username ============================= -->
+<div class="overlay" id="friend-layer" hidden>
+  <div class="overlay-scrim" data-close="friend"></div>
+  <section class="sheet sheet-friend" role="dialog" aria-modal="true" aria-labelledby="friend-title">
+    <header class="sheet-head">
+      <h2 class="sheet-title" id="friend-title">添加好友</h2>
+      <button class="sheet-close sheet-text-btn" type="button" data-close="friend">取消</button>
+    </header>
+    <form class="friend-form" id="friend-form" autocomplete="off">
+      <p class="friend-hint">必须输入完整的 <b>@用户名</b>，例如 <b>@happergudroe</b>。不支持昵称搜索。</p>
+      <label class="search-field friend-field" for="friend-handle">
+        <input id="friend-handle" type="text" placeholder="@username" autocomplete="off" spellcheck="false" maxlength="33">
+      </label>
+      <p class="field-error" id="friend-error" role="alert"></p>
+      <button class="friend-submit" id="friend-submit" type="submit">添加好友</button>
+    </form>
+  </section>
+</div>
+
+<!-- ================= New message ======================================== -->
+<div class="overlay" id="compose-layer" hidden>
+  <div class="overlay-scrim" data-close="compose"></div>
+  <section class="sheet sheet-compose" role="dialog" aria-modal="true" aria-labelledby="compose-title">
+    <header class="sheet-head">
+      <button class="sheet-back" type="button" data-close="compose" aria-label="返回">
+        <svg class="ico" aria-hidden="true"><use href="#i-back"/></svg>
+      </button>
+      <h2 class="sheet-title" id="compose-title">新消息</h2>
+      <button class="sheet-close sheet-text-btn" type="button" data-close="compose">取消</button>
+    </header>
+    <div class="compose-search">
+      <label class="search-field" for="contact-search">
+        <svg class="ico search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="contact-search" type="text" placeholder="搜索联系人" autocomplete="off" spellcheck="false">
+      </label>
+    </div>
+    <div class="contact-list scroll-area" id="contact-list"></div>
+  </section>
+</div>
+
+<!-- ================= Confirm dialog ===================================== -->
+<div class="overlay overlay-alert" id="alert-layer" hidden>
+  <div class="overlay-scrim" data-close="alert"></div>
+  <div class="alert" role="alertdialog" aria-modal="true" aria-labelledby="alert-title" aria-describedby="alert-body">
+    <div class="alert-copy">
+      <h3 class="alert-title" id="alert-title">确认操作</h3>
+      <p class="alert-body" id="alert-body"></p>
+    </div>
+    <div class="alert-actions">
+      <button class="alert-btn" type="button" data-alert="cancel">取消</button>
+      <button class="alert-btn alert-btn-destructive" type="button" data-alert="confirm" id="alert-confirm">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= Context menu (built by JS) ========================= -->
+<div class="overlay overlay-context" id="context-layer" hidden>
+  <div class="context-scrim" data-close="context"></div>
+  <div class="context" id="context-menu" role="menu" aria-label="消息操作">
+    <div class="reaction-bar" id="reaction-bar"></div>
+    <div class="context-menu" id="context-actions"></div>
+  </div>
+</div>
+
+<!-- ================= Attachment menu ==================================== -->
+<div class="overlay overlay-popover" id="attach-layer" hidden>
+  <div class="popover-scrim" data-close="attach"></div>
+  <div class="attach-menu" id="attach-menu" role="menu" aria-label="添加附件">
+    <button class="attach-item" type="button" data-attach="photo">
+      <span class="attach-icon"><svg class="ico" aria-hidden="true"><use href="#i-photo"/></svg></span>
+      <span class="attach-label">照片</span>
+    </button>
+    <button class="attach-item" type="button" data-attach="file">
+      <span class="attach-icon"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg></span>
+      <span class="attach-label">文件</span>
+    </button>
+  </div>
+</div>
+
+<!-- ================= Action sheet (mobile attachments) ================== -->
+<div class="action-sheet-layer" id="action-sheet" hidden>
+  <div class="action-sheet-scrim" data-close="action-sheet"></div>
+  <div class="action-sheet" role="menu" aria-label="添加附件">
+    <div class="action-sheet-group">
+      <button class="action-sheet-btn" type="button" data-attach="photo">照片</button>
+      <button class="action-sheet-btn" type="button" data-attach="file">文件</button>
+    </div>
+    <button class="action-sheet-btn action-sheet-cancel" type="button" data-close="action-sheet">取消</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <svg class="ico toast-ico" aria-hidden="true"><use href="#i-check"/></svg>
+  <span id="toast-text">已复制</span>
+</div>
+
+<input type="file" id="photo-input" accept="image/*" hidden>
+<input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
+<input type="file" id="file-input" hidden>
+
+<noscript><p style="padding:40px;font-family:sans-serif">MYRQVIA Chat 需要启用 JavaScript 才能查看交互原型。</p></noscript>
+
+<script src="js/config.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/presence.js"></script>
+<script src="js/recall.js"></script>
+<script src="js/realtime.js"></script>
+<script src="js/app.js"></script>
+<script src="js/pwa.js?v=10"></script>
+</body>
+</html>
+
