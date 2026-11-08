@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f9fc">
+<title>MYRQVIA Chat — Sign in</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-256.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="MYRQVIA">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/typography.css">
+</head>
+<body>
+<div class="send-transition" id="send-transition" hidden role="status" aria-live="polite">
+  <div class="send-transition-panel">
+    <span class="send-transition-icon" id="send-icon">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="4.5" y="7.5" width="23" height="17" rx="3.4" stroke="currentColor" stroke-width="1.8"/>
+        <path d="m6.2 9.6 9.8 7.2 9.8-7.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="send-transition-check" aria-hidden="true">✓</span>
+    </span>
+    <strong class="send-transition-title" id="send-title">正在发送验证码</strong>
+    <span class="send-transition-email" id="send-email"></span>
+    <span class="send-transition-note" id="send-note">正在连接邮箱服务…</span>
+    <span class="send-transition-progress" aria-hidden="true"><i></i></span>
+  </div>
+</div>
+
+<div class="success-capsule" id="success-capsule" hidden role="status" aria-live="assertive">
+  <span class="success-capsule-check" aria-hidden="true">✓</span>
+  <span class="success-capsule-copy">
+    <strong>Welcome to MYRQVIA</strong>
+    <span>Your account is ready.</span>
+  </span>
+</div>
+
+<div class="auth-page">
+  <main class="auth-main">
+    <header class="auth-brand">
+      <span class="brand-emblem" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+          <g transform="rotate(-12 32 32)" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round">
+            <path d="M44.05 49.20A21 21 0 1 1 51.03 23.13"/>
+          </g>
+          <g transform="rotate(-12 32 32)" fill="#FFFFFF">
+            <circle cx="57.60" cy="38.86" r="4.2"/>
+          </g>
+        </svg>
+      </span>
+      <div class="brand-lockup">
+        <span class="brand-name">MYRQVIA</span>
+        <span class="brand-edition">CHAT 2.0</span>
+      </div>
+      <h1 class="brand-tagline">Connect Beyond Distance.</h1>
+      <p class="brand-sub" data-i18n="brand.sub">A quieter place. A better conversation.</p>
+    </header>
+
+    <section class="auth-card" aria-live="polite">
+      <div class="auth-toolbar">
+        <button class="auth-back" id="auth-back" type="button" aria-label="Back" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 8 12l6.5 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="auth-progress" id="auth-progress" aria-label="Sign-in progress">
+          <span class="auth-progress-step" data-progress="email"><i></i><b data-i18n="progress.email">Email</b></span>
+          <span class="auth-progress-step" data-progress="code"><i></i><b data-i18n="progress.verify">Verify</b></span>
+          <span class="auth-progress-step" data-progress="profile"><i></i><b data-i18n="progress.profile">Profile</b></span>
+          <span class="auth-progress-step" data-progress="done"><i></i><b data-i18n="progress.done">Done</b></span>
+        </div>
+        <span class="auth-lock" title="Secure email verification" aria-label="Secure email verification">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="9.5" rx="2.4"/><path d="M8.2 10V7.8a3.8 3.8 0 0 1 7.6 0V10"/></svg>
+        </span>
+      </div>
+
+      <header class="auth-head">
+        <p class="auth-kicker">MYRQVIA ACCOUNT</p>
+        <h1 id="auth-title">Welcome to MYRQVIA</h1>
+        <p id="auth-sub">Sign in or create your account with email.</p>
+      </header>
+
+      <div class="auth-steps">
+        <form class="auth-step" id="step-email" novalidate>
+          <div class="field">
+            <div class="field-control">
+              <label for="auth-email" data-i18n="label.email">Email address</label>
+              <svg class="field-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.2" width="17" height="13.6" rx="2.4"/><path d="m4.2 6.4 7.8 6.5 7.8-6.5"/></svg>
+              <input id="auth-email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" data-i18n-placeholder="placeholder.email" spellcheck="false" aria-describedby="email-error">
+              <span class="field-check" id="email-valid" aria-hidden="true" hidden>✓</span>
+            </div>
+            <p class="field-error" id="email-error" role="alert"></p>
+          </div>
+
+          <button class="auth-primary" type="submit" id="email-submit" disabled>
+            <span data-i18n="button.continue">Continue</span>
+            <svg class="primary-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="auth-links">
+            <button class="text-button" id="forgot-link" type="button" data-i18n="link.forgot">Forgot password?</button>
+            <button class="text-button" id="create-account" type="button" data-i18n="link.create">Create an account</button>
+          </div>
+        </form>
+
+        <form class="auth-step" id="step-code" novalidate hidden>
+          <p class="auth-to"><span data-i18n="code.sent">Code sent to</span> <b id="code-email"></b></p>
+          <div class="code-field">
+            <label for="code-box-1" data-i18n="label.code">Verification code</label>
+            <div class="code-shell" id="code-shell">
+              <div class="code-boxes" id="code-boxes">
+                <input class="code-box" id="code-box-1" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Verification code digit 1">
+                <input class="code-box" type="text" inputmode="numeric" maxlength="1" aria-label="Verification code digit 2">
+                <input class="code-box" type="text" inputmode="numeric" maxlength="1" aria-label="Verification code digit 3">
+                <input class="code-box" type="text" inputmode="numeric" maxlength="1" aria-label="Verification code digit 4">
+                <input class="code-box" type="text" inputmode="numeric" maxlength="1" aria-label="Verification code digit 5">
+                <input class="code-box" type="text" inputmode="numeric" maxlength="1" aria-label="Verification code digit 6">
+              </div>
+              <div class="code-success" id="code-success" hidden aria-hidden="true">
+                <span class="code-success-check">✓</span>
+              </div>
+            </div>
+            <input id="auth-code" type="hidden">
+            <p class="field-hint" id="code-hint" data-i18n="hint.code">Enter the 6-digit code. It can take a moment to arrive.</p>
+            <p class="code-success-text" id="code-success-text" data-i18n="code.success" hidden>Verification successful</p>
+          </div>
+          <p class="field-error" id="code-error" role="alert"></p>
+          <button class="auth-primary" type="submit" id="code-submit" disabled>
+            <span data-i18n="button.verify">Verify code</span>
+            <svg class="primary-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="auth-links">
+            <button class="text-button" id="resend-code" type="button" data-i18n="link.resend">Resend code</button>
+            <button class="text-button" id="change-email" type="button" data-i18n="link.change">Change email</button>
+          </div>
+        </form>
+
+        <form class="auth-step" id="step-profile" novalidate hidden>
+          <div class="verified-pill">
+            <span>✓</span> <span data-i18n="code.verified">Email verified</span>
+          </div>
+          <div class="field">
+            <div class="field-control">
+              <label for="auth-name" data-i18n="label.name">Display name</label>
+              <svg class="field-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.5-4 3.1-6 6.5-6s6 2 6.5 6"/></svg>
+              <input id="auth-name" type="text" maxlength="32" autocomplete="name" placeholder="How should MYRQVIA address you?" data-i18n-placeholder="placeholder.name" aria-describedby="profile-error">
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-control field-control-username">
+              <label for="auth-username" data-i18n="label.username">MYRQVIA username</label>
+              <span class="username-prefix">@</span>
+              <input id="auth-username" type="text" maxlength="32" autocomplete="username" placeholder="yourname" data-i18n-placeholder="placeholder.username" spellcheck="false" aria-describedby="profile-error">
+              <span class="username-status" id="username-status" role="status"></span>
+            </div>
+            <p class="field-hint" data-i18n="hint.username">5–32 characters, starts with a letter, letters, numbers, and underscores only.</p>
+          </div>
+          <p class="field-error" id="profile-error" role="alert"></p>
+          <button class="auth-primary" type="submit" id="profile-submit">
+            <span data-i18n="button.create">Create account</span>
+            <svg class="primary-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="auth-links auth-links-single">
+            <button class="text-button" id="profile-change-email" type="button" data-i18n="link.change">Change email</button>
+          </div>
+        </form>
+
+        <form class="auth-step" id="step-password" novalidate hidden>
+          <p class="auth-to"><span data-i18n="code.verified">Email verified</span> · <b id="password-email"></b></p>
+          <div class="field">
+            <div class="field-control">
+              <label for="auth-password" data-i18n="label.newPassword">New password</label>
+              <svg class="field-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.4" y="10" width="15.2" height="10.4" rx="2.2"/><path d="M8 10V7.6a4 4 0 0 1 8 0V10"/></svg>
+              <input id="auth-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" data-i18n-placeholder="placeholder.password" aria-describedby="password-error">
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-control">
+              <label for="auth-password2" data-i18n="label.confirmPassword">Confirm password</label>
+              <svg class="field-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.4" y="10" width="15.2" height="10.4" rx="2.2"/><path d="M8 10V7.6a4 4 0 0 1 8 0V10"/></svg>
+              <input id="auth-password2" type="password" autocomplete="new-password" placeholder="Repeat the password" data-i18n-placeholder="placeholder.confirm" aria-describedby="password-error">
+            </div>
+          </div>
+          <p class="field-hint" data-i18n="hint.password">Use at least 8 characters with letters and numbers. Passwords are never stored by this page.</p>
+          <p class="field-error" id="password-error" role="alert"></p>
+          <button class="auth-primary" type="submit" id="password-submit">
+            <span data-i18n="button.save">Save new password</span>
+            <svg class="primary-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+
+        <section class="auth-step auth-success" id="step-success" hidden>
+          <span class="success-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m5 12.4 4.3 4.3L19 7.3"/></svg>
+          </span>
+          <h2 id="success-name">Welcome to MYRQVIA</h2>
+          <p id="success-copy">Your account is ready.</p>
+          <a class="auth-primary success-action" id="done-action" href="./">
+            <span>Enter MYRQVIA Chat</span>
+            <svg class="primary-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </section>
+      </div>
+
+      <footer class="auth-card-foot">
+        <span class="auth-mode" id="auth-mode">Secure email verification</span>
+        <label class="locale-picker">
+          <svg class="locale-globe" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M3.8 12h16.4M12 3.8c2.3 2.4 3.4 5.1 3.4 8.2s-1.1 5.8-3.4 8.2c-2.3-2.4-3.4-5.1-3.4-8.2S9.7 6.2 12 3.8Z"/></svg>
+          <select id="locale-select" class="locale-select" aria-label="Language" data-i18n-aria="language.label">
+            <option value="zh-Hans">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+          </select>
+          <svg class="locale-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        </label>
+      </footer>
+    </section>
+
+    <footer class="site-foot">
+      <span>© 2026 MYRQVIA</span>
+      <span class="site-links">
+        <button class="site-link" type="button" data-legal="help" data-i18n="link.help">Help</button>
+        <button class="site-link" type="button" data-legal="privacy" data-i18n="link.privacy">Privacy</button>
+        <a href="./" data-i18n="link.back">Back to Chat</a>
+      </span>
+    </footer>
+    <p class="brand-baseline">MYRQVIA CHAT <span>·</span> CONNECT BEYOND DISTANCE</p>
+  </main>
+</div>
+
+<div class="legal-layer" id="legal-layer" hidden>
+  <div class="legal-scrim" data-close-legal></div>
+  <section class="legal-sheet" role="dialog" aria-modal="true" aria-labelledby="legal-title">
+    <header class="legal-head">
+      <p class="legal-kicker">MYRQVIA ACCOUNT</p>
+      <h2 id="legal-title">Help</h2>
+      <button class="legal-close" type="button" id="legal-close" data-close-legal aria-label="Close">×</button>
+    </header>
+    <div class="legal-body" id="legal-body"></div>
+    <footer class="legal-foot">
+      <a class="legal-contact" id="legal-contact" href="mailto:happergudroe@gmail.com" data-i18n="legal.contact">Email support</a>
+      <button class="legal-clear" type="button" id="legal-clear" data-i18n="legal.clear" hidden>Clear local preview data</button>
+    </footer>
+  </section>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/auth-service.js"></script>
+<script src="js/login.js"></script>
+<script src="js/pwa.js?v=10"></script>
+</body>
+</html>
